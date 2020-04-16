@@ -12,3 +12,4 @@ There are eventually other ways to make money too, like resource collecting, gam
 - "Email" inbox with plot and flavour text
 - Upgrades for pilots (complete missions faster etc...)
 - For Missions that take longer or "Special Missions" (more than 10 minutes), there is a chance it might not be succesful. you get a special report once it's completed telling you if it worked out, it it didn't and why.
+- "Mailbox"/"Message Board" where the player recieves messages with text to forward the plot or for worlduilding so that the pacing and flow of the game isn't compromised.
