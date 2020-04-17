@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5c90981045dcf564ca5a5e8e5da29649, type: 3}
-  m_Name: Mission1
+  m_Name: Mission7
   m_EditorClassIdentifier: 
-  pilotsName: stefano
-  missionDurationInSeconds: 1
-  missionValue: 10
-  chanceOfSuccess: 100
+  pilotsName: garfield
+  missionDurationInSeconds: 10
+  missionValue: 100000
+  chanceOfSuccess: 10
   inProgress: 0

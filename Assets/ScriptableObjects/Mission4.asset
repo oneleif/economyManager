@@ -15,3 +15,5 @@ MonoBehaviour:
   pilotsName: sabien
   missionDurationInSeconds: 15
   missionValue: 10000
+  chanceOfSuccess: 80
+  inProgress: 0

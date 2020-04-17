@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +15,9 @@ public class MissionButton : MonoBehaviour
     public GameObject countdownTextObject;
     public Text countdownText;
 
+    public Text chanceOfSuccessText;
+    public Text rewardText;
+
     public Mission mission;
     public bool performingMission;
 
@@ -23,6 +26,9 @@ public class MissionButton : MonoBehaviour
         performingMission = false;
         pilotText.text = mission.pilotsName;
         this.mission = mission;
+        this.mission.inProgress = false;
+        chanceOfSuccessText.text = $"{mission.chanceOfSuccess}%";
+        rewardText.text = $"{mission.missionValue}$";
 
         ResetMissionTime();
     }

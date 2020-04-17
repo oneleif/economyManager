@@ -15,3 +15,5 @@ MonoBehaviour:
   pilotsName: crow
   missionDurationInSeconds: 10
   missionValue: 1000
+  chanceOfSuccess: 85
+  inProgress: 0

@@ -6,6 +6,7 @@ public class Mission : ScriptableObject
     public string pilotsName;
     public int missionDurationInSeconds;
     public long missionValue;
+    public int chanceOfSuccess;
 
     public bool inProgress;
 }
