@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject missionButtonPrefab;
 
-    public GameObject gamePanel;
+    public GameObject missionsPanel;
 
     public Text playerMoneyText;
 
@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
 
             missionButton.Setup(mission);
 
-            newButton.transform.parent = gamePanel.transform;
+            newButton.transform.parent = missionsPanel.transform;
 
             missionButton.button.onClick.AddListener( delegate { PerformMission(missionButton); } );
         }
