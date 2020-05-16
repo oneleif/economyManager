@@ -9,9 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c90981045dcf564ca5a5e8e5da29649, type: 3}
-  m_Name: Mission1
+  m_Script: {fileID: 11500000, guid: 383d59367f355a4429ae168f5d38c3da, type: 3}
+  m_Name: Message1
   m_EditorClassIdentifier: 
-  pilotsName: stefano
-  missionDurationInSeconds: 1
-  missionValue: 10
+  sender: sabien
+  subject: answer me
+  body: as;dfjaslkfjsaf;lsfalk
+  condition: 0
+  unlocked: 0

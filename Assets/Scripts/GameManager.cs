@@ -1,70 +1,57 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public MissionContainer missionContainer;
-    public PlayerData playerData;
+    public UnityEvent<long> updateMoneyEvent;
 
-    public GameObject missionButtonPrefab;
-
-    public GameObject missionsPanel;
-
-    public Text playerMoneyText;
+    public MessagesManager messagesManager;
+    public MoneyManager moneyManager;
+    public MissionsManager missionsManager;
 
     void Start()
     {
-        playerMoneyText.text = "$" + playerData.playerMoney;
-        GenerateMissionButtons();
+        GetRequiredComponents();
+
+        updateMoneyEvent = new UpdateMoneyEvent();
+        updateMoneyEvent.RemoveAllListeners();
+        updateMoneyEvent.AddListener(moneyManager.UpdatePlayerMoney);
+        updateMoneyEvent.AddListener(messagesManager.CheckMessagesToAdd);
+        updateMoneyEvent.Invoke(0);
     }
 
-    void GenerateMissionButtons()
+    private void GetRequiredComponents()
     {
-        foreach(Mission mission in missionContainer.missions)
+        messagesManager = GetComponent<MessagesManager>();
+        if (messagesManager == null)
         {
-            GameObject newButton = Instantiate(missionButtonPrefab);
-            MissionButton missionButton = newButton.GetComponent<MissionButton>();
-
-            missionButton.Setup(mission);
-
-            newButton.transform.parent = missionsPanel.transform;
-
-            missionButton.button.onClick.AddListener( delegate { PerformMission(missionButton); } );
-        }
-    }
-
-    void PerformMission(MissionButton missionButton)
-    {
-        if (missionButton.mission.inProgress)
-        {
-            return;
+            Debug.LogError("no messagesManager found, check the object hierarchy");
         }
 
-        StartCoroutine(WaitForMission(missionButton));
-    }
-
-    IEnumerator WaitForMission(MissionButton missionButton)
-    {
-        Mission mission = missionButton.mission;
-        mission.inProgress = true;
-
-        int currentTimer = mission.missionDurationInSeconds;
-        while(currentTimer > 0)
+        moneyManager = GetComponent<MoneyManager>();
+        if (moneyManager == null)
         {
-            yield return new WaitForSeconds(1);
-            currentTimer--;
-            missionButton.SetMissionTime(currentTimer);
+            Debug.LogError("no moneyManager found, check the object hierarchy");
         }
-        
-        playerData.playerMoney += mission.missionValue;
-        missionButton.ResetMissionTime();
-        playerMoneyText.text = "$" + playerData.playerMoney;
+
+        missionsManager = GetComponent<MissionsManager>();
+        if (missionsManager == null)
+        {
+            Debug.LogError("no missionsManager found, check the object hierarchy");
+        }
     }
 
     void Update()
     {
         
+    }
+
+    [System.Serializable]
+    public class UpdateMoneyEvent: UnityEvent<long>
+    {
+
     }
 }

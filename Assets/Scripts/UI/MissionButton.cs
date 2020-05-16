@@ -23,6 +23,7 @@ public class MissionButton : MonoBehaviour
         performingMission = false;
         pilotText.text = mission.pilotsName;
         this.mission = mission;
+        mission.inProgress = false;
 
         ResetMissionTime();
     }
@@ -37,5 +38,6 @@ public class MissionButton : MonoBehaviour
     {
         TimeSpan missionDuration = new TimeSpan(0, 0, mission.missionDurationInSeconds);
         countdownText.text = missionDuration.ToString("c");
+        mission.inProgress = false;
     }
 }
