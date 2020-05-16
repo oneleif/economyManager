@@ -3160,6 +3160,7 @@ MonoBehaviour:
   messagesListView: {fileID: 37429817}
   messagesDetailView: {fileID: 2029747419}
   messageDetailViewHandler: {fileID: 2029747423}
+  backButton: {fileID: 1698040597}
 --- !u!114 &1432727477
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3383,7 +3384,7 @@ GameObject:
   - component: {fileID: 1698040598}
   - component: {fileID: 1698040597}
   m_Layer: 5
-  m_Name: Button
+  m_Name: BackButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
