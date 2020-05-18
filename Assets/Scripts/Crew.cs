@@ -7,9 +7,11 @@ using UnityEngine.UI;
 
 public class Crew : MonoBehaviour
 {
-	private string[] maleNames = File.ReadAllLines("./Assets/ImportedAssets/male_names.txt");
-	private string[] femaleNames = File.ReadAllLines("./Assets/ImportedAssets/female_names.txt");
+	private enum Gender { male, female, robot };
 
+	private string[] maleNames;
+	private string[] femaleNames;
+	
 	private string randomName;
 	private string firstName;
 	private char initial;
@@ -24,14 +26,17 @@ public class Crew : MonoBehaviour
 
 	public void Awake()
 	{
-		randomMaleNameButton.onClick.AddListener(delegate { randomPilotName("male"); });
-		randomFemaleNameButton.onClick.AddListener(delegate { randomPilotName("female"); });
-		randomRobotNameButton.onClick.AddListener(delegate { randomPilotName("robot"); });
+		maleNames = PilotNameDataSingleton.Instance.MaleNames;
+		femaleNames = PilotNameDataSingleton.Instance.FemaleNames;
+
+		randomMaleNameButton.onClick.AddListener(delegate { randomPilotName(Gender.male); });
+		randomFemaleNameButton.onClick.AddListener(delegate { randomPilotName(Gender.female); });
+		randomRobotNameButton.onClick.AddListener(delegate { randomPilotName(Gender.robot); });
 	}
 
-	private void randomPilotName(string gender)
+	private void randomPilotName(Gender gender)
 	{
-		if (gender == "male")
+		if (gender == Gender.male)
 		{
 			string firstName = maleNames[Random.Range(0, maleNames.Length)];
 			char initial = char.ToUpper((char)('a' + Random.Range(0, 26)));
@@ -39,15 +44,14 @@ public class Crew : MonoBehaviour
 			randomMaleNameText.text = randomName;
 
 		}
-		else if (gender == "female")
+		else if (gender == Gender.female)
 		{
 			string firstName = femaleNames[Random.Range(0, femaleNames.Length)];
 			char initial = char.ToUpper((char)('a' + Random.Range(0, 26)));
 			randomName = $"{firstName} {initial}.";
 			randomFemaleNameText.text = randomName;
 		}
-		// robot name 
-		else
+		else if (gender == Gender.robot) 
 		{
 			string prefix = string.Empty; 
 			string suffix = string.Empty;
