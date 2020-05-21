@@ -7,14 +7,11 @@ using UnityEngine.UI;
 
 public class Crew : MonoBehaviour
 {
-	private enum Gender { male, female, robot };
+	private enum Gender { Male, Female, Robot };
 
 	private string[] maleNames;
 	private string[] femaleNames;
-	
 	private string randomName;
-	private string firstName;
-	private char initial;
 	private int prefixLength = 3;
 	private int suffixLength = 4;
 
@@ -24,35 +21,40 @@ public class Crew : MonoBehaviour
 	[SerializeField]
 	private Text randomMaleNameText, randomFemaleNameText, randomRobotNameText;
 
-	public void Awake()
+	public void Start()
 	{
 		maleNames = PilotNameDataSingleton.Instance.MaleNames;
 		femaleNames = PilotNameDataSingleton.Instance.FemaleNames;
 
-		randomMaleNameButton.onClick.AddListener(delegate { randomPilotName(Gender.male); });
-		randomFemaleNameButton.onClick.AddListener(delegate { randomPilotName(Gender.female); });
-		randomRobotNameButton.onClick.AddListener(delegate { randomPilotName(Gender.robot); });
+		randomMaleNameButton.onClick.RemoveAllListeners();
+		randomFemaleNameButton.onClick.RemoveAllListeners();
+		randomRobotNameButton.onClick.RemoveAllListeners();
+		randomMaleNameButton.onClick.AddListener(delegate { randomPilotName(Gender.Male); });
+		randomFemaleNameButton.onClick.AddListener(delegate { randomPilotName(Gender.Female); });
+		randomRobotNameButton.onClick.AddListener(delegate { randomPilotName(Gender.Robot); });
 	}
 
 	private void randomPilotName(Gender gender)
 	{
-		if (gender == Gender.male)
+		if (gender == Gender.Male)
 		{
 			string firstName = maleNames[Random.Range(0, maleNames.Length)];
 			char initial = char.ToUpper((char)('a' + Random.Range(0, 26)));
+			Debug.Log("init" + initial);
 			randomName = $"{firstName} {initial}.";
 			randomMaleNameText.text = randomName;
-
 		}
-		else if (gender == Gender.female)
+		else if (gender == Gender.Female)
 		{
+			Debug.Log("female");
 			string firstName = femaleNames[Random.Range(0, femaleNames.Length)];
 			char initial = char.ToUpper((char)('a' + Random.Range(0, 26)));
 			randomName = $"{firstName} {initial}.";
 			randomFemaleNameText.text = randomName;
 		}
-		else if (gender == Gender.robot) 
+		else if (gender == Gender.Robot) 
 		{
+			Debug.Log("robot");
 			string prefix = string.Empty; 
 			string suffix = string.Empty;
 
