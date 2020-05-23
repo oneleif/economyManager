@@ -22,6 +22,8 @@ public class GameManager : MonoBehaviour
 
     void GenerateMissionButtons()
     {
+        missionsPanel.GetComponentInChildren<GridLayoutGroup>();    
+
         foreach(Mission mission in missionContainer.missions)
         {
             GameObject newButton = Instantiate(missionButtonPrefab);
@@ -61,6 +63,7 @@ public class GameManager : MonoBehaviour
         playerData.playerMoney += mission.missionValue;
         missionButton.ResetMissionTime();
         playerMoneyText.text = "$" + playerData.playerMoney;
+        mission.inProgress = false; 
     }
 
     void Update()

@@ -8,6 +8,7 @@ public class MissionButton : MonoBehaviour
 {
     public GameObject buttonObject;
     public Button button;
+    public Slider slider; 
 
     public GameObject pilotTextObject;
     public Text pilotText; 
@@ -16,7 +17,7 @@ public class MissionButton : MonoBehaviour
     public Text countdownText;
 
     public Mission mission;
-    public bool performingMission;
+    public bool performingMission;  
 
     public void Setup(Mission mission)
     {
@@ -31,11 +32,13 @@ public class MissionButton : MonoBehaviour
     {
         TimeSpan missionDuration = new TimeSpan(0, 0, timeLeftInSeconds);
         countdownText.text = missionDuration.ToString("c");
+        this.slider.value += 1f / (float)this.mission.missionDurationInSeconds;
     }
 
     public void ResetMissionTime()
     {
         TimeSpan missionDuration = new TimeSpan(0, 0, mission.missionDurationInSeconds);
         countdownText.text = missionDuration.ToString("c");
+        this.slider.value = 0f; 
     }
 }
