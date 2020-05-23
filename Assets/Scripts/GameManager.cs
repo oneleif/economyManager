@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
-
+        missionButton.slider.value = 0f; 
         StartCoroutine(WaitForMission(missionButton));
     }
 
