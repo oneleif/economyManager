@@ -9,19 +9,18 @@ public static class Deck
 {
     public static List<Card> deck = new List<Card>();
     public static List<Card> drawnCards = new List<Card>();
-    public static Sprite cardBackSprite;
+    public static Sprite cardbackSprite;
     public static Sprite[] cardSprites;
 
     // Stores cards drawn from the deck so they can be shuffled back into the deck after the game 
-    // Without having to call InitialiseDeck() again 
-
-
-    //public static 
+    // without having to call InitialiseDeck() again 
 
     public static void InitialiseDeck()
     {
-        cardBackSprite = Resources.Load<Sprite>("Sprites/Cardbacks/cardback1");
+        cardbackSprite = Resources.Load<Sprite>("Sprites/Cardbacks/cardback1");
 
+		// Sprite names have the following format: [suit][1..9, 91..94] - so that we don't need to use .OrderBy() 
+		// [suit][1..13] is not alphabetically ordered
         cardSprites = Resources.LoadAll<Sprite>("Sprites/PlayingCards");
         int index = 0;
 
@@ -30,6 +29,7 @@ public static class Deck
             for (int j = 1; j <= 13; j++)
             {
                 int value = j < 10 ? j : 10;
+				Debug.Log("value: " + value + "...cardname: " + cardSprites[index].name);  
                 deck.Add(new Card(value, cardSprites[index]));
                 index++;
             }
@@ -83,4 +83,12 @@ public static class Deck
         Image imageObject = cardObject.AddComponent<Image>();
         imageObject.sprite = cardSprite;
     }
+	
+	public static void PrintLoop()
+	{
+		foreach (Card card in deck)
+		{
+			Debug.Log("Card name: " + card.sprite.name + "... Card value: " + card.value); 
+		}
+	} 
 }

@@ -36,7 +36,8 @@ public class BlackjackManager : MonoBehaviour
 
         SetupTable();
         NewGame();
-        Debug.Log(Deck.cardSprites[0].name); 
+		Deck.PrintLoop(); 
+        //Debug.Log(Deck.cardSprites[0].name); 
         //DealStartingHand(); 
 
         // init again (but don't reload sprites) - or get a separate method for re-ordering them 
@@ -70,10 +71,10 @@ public class BlackjackManager : MonoBehaviour
         _blackjackPlayer.hand.Add(drawnCard);
         GameObject drawnCardObject = new GameObject("CardObject");
         drawnCardObject.transform.parent = _blackjackPlayer.isDealer ? dealerCardContainer.transform : playerCardContainer.transform;
-        drawnCardObject.AddComponent<Image>().sprite = faceUp ? drawnCard.sprite : Deck.cardBackSprite;
+        drawnCardObject.AddComponent<Image>().sprite = faceUp ? drawnCard.sprite : Deck.cardbackSprite;
         _blackjackPlayer.handTotal += drawnCard.value;
 
-        Debug.Log("Drawn card name: " + drawnCard.sprite.name + "Drawn value: " + drawnCard.value);
+        //Debug.Log("Drawn card name: " + drawnCard.sprite.name + "Drawn value: " + drawnCard.value);
 
         //// Check if ace should be high or low  
         //foreach (Card card in _blackjackPlayer.hand)
@@ -376,7 +377,7 @@ public class BlackjackManager : MonoBehaviour
         }
         else if (blackjackPlayer.isBust)
         {
-            
+            PostGame(); 
         }
         //if (blackjackPlayer.isBust || blackjackDealer.isBust)
         //{
