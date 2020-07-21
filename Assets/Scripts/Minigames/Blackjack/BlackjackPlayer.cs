@@ -9,11 +9,10 @@ public class BlackjackPlayer : ScriptableObject
 {
     public List<Card> hand = new List<Card>(); 
     public int handTotal;
-    public int chips;
+    public int chips; 
     public int wager; 
-    public bool isUpNext;
+	public bool hasWagered; 
     public bool isStanding;
     public bool isBust;
     public bool isDealer;
 }
-

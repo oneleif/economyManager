@@ -12,11 +12,14 @@ public class Card
 {
     public Suits suit;
     public int value;
+	// public bool isAce; 
+	public bool isHigh; 
     public Sprite sprite;
 
-    public Card(int value, Sprite sprite)
+    public Card(int value, bool isHigh, Sprite sprite)
     {
         this.value = value;
+		this.isHigh = isHigh; 
         this.sprite = sprite;
     }
 }

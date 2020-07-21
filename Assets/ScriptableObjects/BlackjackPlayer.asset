@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c568899235585fc4ba16dfde308b473d, type: 3}
   m_Name: BlackjackPlayer
   m_EditorClassIdentifier: 
-  handTotal: 18
-  chips: 0
+  handTotal: 12
+  chips: 2500
   wager: 0
-  isUpNext: 1
+  hasWagered: 0
   isStanding: 0
   isBust: 0
   isDealer: 0
