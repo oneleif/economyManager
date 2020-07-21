@@ -115,10 +115,11 @@ public class BlackjackManager : MonoBehaviour
         RectTransform rectTransform = blackjackTableContainer.GetComponent<RectTransform>();
         RectTransform parentRectTransform = gameObject.GetComponent<RectTransform>();
         rectTransform.anchoredPosition = parentRectTransform.position;
-        rectTransform.anchorMin = new Vector2(1f, 0f);
-        rectTransform.anchorMax = new Vector2(0f, 1f);
+        rectTransform.anchorMin = new Vector2(0f, 0f);
+        rectTransform.anchorMax = new Vector2(1f, 1f);
         rectTransform.pivot = new Vector2(0.5f, 0.5f);
         rectTransform.sizeDelta = gameObject.GetComponent<RectTransform>().rect.size;
+		rectTransform.localScale = Vector3.one; 
         blackjackTableContainer.transform.parent = gameObject.transform;
 
 		// Create header object 
@@ -321,8 +322,8 @@ public class BlackjackManager : MonoBehaviour
             foreach (Card card in Deck.drawnCards)
             {
                 Deck.deck.Add(card);
-                Deck.drawnCards.Remove(card); 
             }
+			Deck.drawnCards.Clear(); 
         }
         Deck.ShuffleDeck();
 		
@@ -393,22 +394,29 @@ public class BlackjackManager : MonoBehaviour
 		// But if you press the button 7 times, it works somehow...
 		
 		// Copy child card objects to an array 
-		GameObject[] childCardObjects = new GameObject[_transform.childCount - 1]; 
-		int index = 0; 
+		// GameObject[] childCardObjects = new GameObject[_transform.childCount - 1]; 
+		// int index = 0; 
+		// foreach (Transform child in _transform) 
+		// {
+			// if (child.gameObject.name == "CardObject") 
+			// {
+				// childCardObjects[index] = child.gameObject;
+				// index++; 
+			// }
+		// }
+		
+		// // Destroy children iteratively 
+		// foreach (GameObject child in childCardObjects) 
+		// {
+			// Destroy(child);
+		// } 
 		foreach (Transform child in _transform) 
 		{
 			if (child.gameObject.name == "CardObject") 
 			{
-				childCardObjects[index] = child.gameObject;
-				index++; 
+				Destroy(child.gameObject); 
 			}
 		}
-		
-		// Destroy children iteratively 
-		foreach (GameObject child in childCardObjects) 
-		{
-			DestroyImmediate(child);
-		} 
 	}
 
     private void PostGame()
