@@ -110,17 +110,19 @@ public class BlackjackManager : MonoBehaviour
         verticalLayoutGroup.childForceExpandWidth = true;
         verticalLayoutGroup.childForceExpandHeight = true;
         verticalLayoutGroup.spacing = 32f; 
+		verticalLayoutGroup.padding.left = 32; 
         blackjackTableContainer.AddComponent<Image>().color = Color.green;
 
         RectTransform rectTransform = blackjackTableContainer.GetComponent<RectTransform>();
         RectTransform parentRectTransform = gameObject.GetComponent<RectTransform>();
+		blackjackTableContainer.transform.parent = gameObject.transform;
         rectTransform.anchoredPosition = parentRectTransform.position;
         rectTransform.anchorMin = new Vector2(0f, 0f);
         rectTransform.anchorMax = new Vector2(1f, 1f);
         rectTransform.pivot = new Vector2(0.5f, 0.5f);
-        rectTransform.sizeDelta = gameObject.GetComponent<RectTransform>().rect.size;
 		rectTransform.localScale = Vector3.one; 
-        blackjackTableContainer.transform.parent = gameObject.transform;
+		rectTransform.offsetMin = Vector2.zero; 
+		rectTransform.offsetMax = Vector2.zero; 
 
 		// Create header object 
         GameObject headerTextObject = new GameObject("HeaderText");
@@ -142,7 +144,6 @@ public class BlackjackManager : MonoBehaviour
         playerCardContainer = new GameObject("PlayerCardContainer");
         playerCardContainer.transform.parent = blackjackTableContainer.transform;
         rectTransform = playerCardContainer.AddComponent<RectTransform>();
-        rectTransform.offsetMax = new Vector2(16f, 16f);
         playerCardContainer.AddComponent<GridLayoutGroup>().cellSize = new Vector2(60, 84f);
         playerTotalObject = new GameObject("PlayerTotalText");
         playerTotalObject.transform.parent = playerCardContainer.transform;
@@ -220,7 +221,6 @@ public class BlackjackManager : MonoBehaviour
         newGameButtonObject = Instantiate(blackjackButtonPrefab);
 		newGameButtonObject.name = "NewGameButton"; 
         newGameButtonObject.transform.parent = blackjackButtonContainer.transform;
-        // rectTransform = newGameButtonObject.GetComponent<RectTransform>();
 		newGameButtonObject.SetActive(false); 
         Button newGameButton = newGameButtonObject.GetComponent<Button>();
         newGameButton.GetComponentInChildren<Text>().text = "Play again";
@@ -386,30 +386,8 @@ public class BlackjackManager : MonoBehaviour
 		} 
 	} 
 
-	// InvalidOperationException even when copying references to a separate array...
 	public void DestroyChildCardObjects(Transform _transform) 
 	{ 
-		// Foreach (Transform child in playerCardContainer.transform) throws InvalidOperationException 
-		// As does copying object references to separate array and iterating over that array 
-		// But if you press the button 7 times, it works somehow...
-		
-		// Copy child card objects to an array 
-		// GameObject[] childCardObjects = new GameObject[_transform.childCount - 1]; 
-		// int index = 0; 
-		// foreach (Transform child in _transform) 
-		// {
-			// if (child.gameObject.name == "CardObject") 
-			// {
-				// childCardObjects[index] = child.gameObject;
-				// index++; 
-			// }
-		// }
-		
-		// // Destroy children iteratively 
-		// foreach (GameObject child in childCardObjects) 
-		// {
-			// Destroy(child);
-		// } 
 		foreach (Transform child in _transform) 
 		{
 			if (child.gameObject.name == "CardObject") 
@@ -476,12 +454,5 @@ public class BlackjackManager : MonoBehaviour
 				PostGame(); 
             }
         }
-    }
-
-    void OnGUI()
-    {
-        GUIStyle style = new GUIStyle();
-        style.fontSize = 24;
-        //GUI.Label(new Rect(10, 0, 0, 0), $"Player total: {Player.handtotal}", style);
     }
 }
