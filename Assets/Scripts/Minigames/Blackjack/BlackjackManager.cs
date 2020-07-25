@@ -5,8 +5,9 @@ using UnityEngine.UI;
 
 public class BlackjackManager : MonoBehaviour
 {
+	// Container objects 
+	private GameObject parentContainer; 
     private GameObject blackjackTableContainer;
-	
     private GameObject playerCardContainer;
     private GameObject dealerCardContainer;
     public GameObject blackjackButtonPrefab;
@@ -22,6 +23,7 @@ public class BlackjackManager : MonoBehaviour
 	private GameObject wager500ButtonObject; 
 	private GameObject wager1000ButtonObject; 
 
+	private GameObject headerTextObject; 
 	private GameObject gameInfoObject;
 	private Text gameInfoText; 
     private GameObject wagerTextObject;
@@ -38,6 +40,7 @@ public class BlackjackManager : MonoBehaviour
     private void Start()
     {
         InitialiseNewSessionButton(); 
+		// BlackjackUtils.InitialiseNewSessionButton(gameObject, newSessionButtonObject, blackjackButtonPrefab); 
 		blackjackPlayer.chips = 2500; 
     }
 
@@ -101,140 +104,90 @@ public class BlackjackManager : MonoBehaviour
 	
     private void SetupTable()
     {
-		// Create overarching container object 
-        blackjackTableContainer = new GameObject("BlackjackTableContainer");
-        LayoutElement layoutElement = blackjackTableContainer.AddComponent<LayoutElement>();
-        VerticalLayoutGroup verticalLayoutGroup = blackjackTableContainer.AddComponent<VerticalLayoutGroup>();
-        verticalLayoutGroup.childControlWidth = true;
-        verticalLayoutGroup.childControlHeight = true;
-        verticalLayoutGroup.childForceExpandWidth = true;
-        verticalLayoutGroup.childForceExpandHeight = true;
-        verticalLayoutGroup.spacing = 32f; 
-		verticalLayoutGroup.padding.left = 32; 
-        blackjackTableContainer.AddComponent<Image>().color = Color.green;
-
-        RectTransform rectTransform = blackjackTableContainer.GetComponent<RectTransform>();
-        RectTransform parentRectTransform = gameObject.GetComponent<RectTransform>();
-		blackjackTableContainer.transform.parent = gameObject.transform;
-        rectTransform.anchoredPosition = parentRectTransform.position;
-        rectTransform.anchorMin = new Vector2(0f, 0f);
-        rectTransform.anchorMax = new Vector2(1f, 1f);
-        rectTransform.pivot = new Vector2(0.5f, 0.5f);
-		rectTransform.localScale = Vector3.one; 
-		rectTransform.offsetMin = Vector2.zero; 
-		rectTransform.offsetMax = Vector2.zero; 
-
-		// Create header object 
-        GameObject headerTextObject = new GameObject("HeaderText");
-        headerTextObject.transform.parent = blackjackTableContainer.transform;
-        Text headerText = headerTextObject.AddComponent<Text>();
-		headerText.color = Color.black; 
-        headerText.text = "Blackjack Table";
-        headerText.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
-
-		// Create container for information about the current session 
-        gameInfoObject = new GameObject("BlackjackGameInfo");
-        gameInfoObject.transform.parent = blackjackTableContainer.transform; 
-		gameInfoText = gameInfoObject.AddComponent<Text>(); 
-		gameInfoText.color = Color.black; 
-		gameInfoText.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
-		gameInfoText.text = $"You have {blackjackPlayer.chips} chips. Place a bet to begin the game!"; 
-
-		// Create container for the player's hand 
-        playerCardContainer = new GameObject("PlayerCardContainer");
-        playerCardContainer.transform.parent = blackjackTableContainer.transform;
-        rectTransform = playerCardContainer.AddComponent<RectTransform>();
-        playerCardContainer.AddComponent<GridLayoutGroup>().cellSize = new Vector2(60, 84f);
-        playerTotalObject = new GameObject("PlayerTotalText");
-        playerTotalObject.transform.parent = playerCardContainer.transform;
-        playerTotalText = playerTotalObject.AddComponent<Text>();
-        playerTotalText.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
-        playerTotalText.color = Color.black;
-
-		// Create container for the dealer's hand 
-        dealerCardContainer = new GameObject("DealerCardContainer");
-        dealerCardContainer.transform.parent = blackjackTableContainer.transform;
-        dealerCardContainer.AddComponent<GridLayoutGroup>().cellSize = new Vector2(60f, 84f);
-        dealerTotalObject = new GameObject("DealerTotalText");
-        dealerTotalObject.transform.parent = dealerCardContainer.transform;
-        dealerTotalText = dealerTotalObject.AddComponent<Text>();
-        dealerTotalText.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
-        dealerTotalText.color = Color.black; 
+		RectTransform rectTransform; 
+		
+		BlackjackUtils.InitialiseTableContainer(parentContainer, blackjackTableContainer); 
+		BlackjackUtils.InitialiseHeader(parentContainer, headerTextObject); 
+		BlackjackUtils.InitialiseGameInfo(parentContainer, gameInfoObject, gameInfoText, blackjackPlayer); 
+		BlackjackUtils.InitialiseCardContainer(parentContainer, playerCardContainer, playerTotalObject, playerTotalText, false);
+		BlackjackUtils.InitialiseCardContainer(parentContainer, dealerCardContainer, dealerTotalObject, dealerTotalText, true); 
 
 		// Create container object for all in-game buttons 
-        blackjackButtonContainer = new GameObject("BlackjackButtonContainer");
-        blackjackButtonContainer.transform.parent = blackjackTableContainer.transform;
-        blackjackButtonContainer.AddComponent<GridLayoutGroup>().cellSize = new Vector2(128f, 32f);
-        rectTransform = blackjackButtonContainer.AddComponent<RectTransform>();
+		BlackjackUtils.InitialiseButtonContainer(parentContainer, blackjackButtonContainer); 
 
 		// Create buttons for selecting no. of chips to wager 
-		wager100ButtonObject = Instantiate(blackjackButtonPrefab);
-		wager100ButtonObject.name = "Wager100Button";
-		wager100ButtonObject.transform.parent = blackjackButtonContainer.transform; 
-		Button button = wager100ButtonObject.GetComponent<Button>();  
-		button.GetComponentInChildren<Text>().text = "Wager 100";
-		button.onClick.RemoveAllListeners(); 
-		button.onClick.AddListener(delegate { HandleWager(blackjackPlayer, 100); });
+		// wager100ButtonObject = Instantiate(blackjackButtonPrefab);
+		// wager100ButtonObject.name = BlackjackConstants.wager100ButtonName; 
+		// wager100ButtonObject.transform.parent = blackjackButtonContainer.transform; 
+		// Button button = wager100ButtonObject.GetComponent<Button>();  
+		// button.GetComponentInChildren<Text>().text = BlackjackConstants.wager100ButtonText; 
+		// button.onClick.RemoveAllListeners(); 
+		// button.onClick.AddListener(delegate { HandleWager(blackjackPlayer, 100); });
 		
-		wager500ButtonObject = Instantiate(blackjackButtonPrefab);
-		wager500ButtonObject.name = "Wager500Button";
-		wager500ButtonObject.transform.parent = blackjackButtonContainer.transform; 
-		button = wager500ButtonObject.GetComponent<Button>(); 
-		button.GetComponentInChildren<Text>().text = "Wager 500";
-		button.onClick.RemoveAllListeners(); 
-		button.onClick.AddListener(delegate { HandleWager(blackjackPlayer, 500); });
+		// wager500ButtonObject = Instantiate(blackjackButtonPrefab);
+		// wager500ButtonObject.name = BlackjackConstants.wager500ButtonName;
+		// wager500ButtonObject.transform.parent = blackjackButtonContainer.transform; 
+		// button = wager500ButtonObject.GetComponent<Button>(); 
+		// button.GetComponentInChildren<Text>().text = BlackjackConstants.wager500ButtonText;
+		// button.onClick.RemoveAllListeners(); 
+		// button.onClick.AddListener(delegate { HandleWager(blackjackPlayer, 500); });
 		
-		wager1000ButtonObject = Instantiate(blackjackButtonPrefab);
-		wager1000ButtonObject.name = "Wager1000Button";
-		wager1000ButtonObject.transform.parent = blackjackButtonContainer.transform; 
-		button = wager1000ButtonObject.GetComponent<Button>();
-		button.GetComponentInChildren<Text>().text = "Wager 1000";
-		button.onClick.RemoveAllListeners(); 
-		button.onClick.AddListener(delegate { HandleWager(blackjackPlayer, 1000); });
+		// wager1000ButtonObject = Instantiate(blackjackButtonPrefab);
+		// wager1000ButtonObject.name = BlackjackConstants.wager1000ButtonName;
+		// wager1000ButtonObject.transform.parent = blackjackButtonContainer.transform; 
+		// button = wager1000ButtonObject.GetComponent<Button>();
+		// button.GetComponentInChildren<Text>().text = BlackjackConstants.wager1000ButtonText;
+		// button.onClick.RemoveAllListeners(); 
+		// button.onClick.AddListener(delegate { HandleWager(blackjackPlayer, 1000); });
+		InitialiseWagerButtonObject(wager100ButtonObject, blackjackPlayer, 100); 
 
         // Create button for "hitting" 
-        hitButtonObject = Instantiate(blackjackButtonPrefab);
-		hitButtonObject.name = "HitButton"; 
-        hitButtonObject.transform.parent = blackjackButtonContainer.transform;
-		hitButtonObject.SetActive(false); 
+        // hitButtonObject = Instantiate(blackjackButtonPrefab);
+		// hitButtonObject.name = BlackjackConstants.hitButtonName; 
+        // hitButtonObject.transform.parent = blackjackButtonContainer.transform;
+		// hitButtonObject.SetActive(false); 
 
-        Button hitButton = hitButtonObject.GetComponent<Button>();
-        hitButton.GetComponentInChildren<Text>().text = "Hit!";
-        hitButton.onClick.RemoveAllListeners();
-        hitButton.onClick.AddListener(delegate { DealCard(blackjackPlayer, true); });
+        // Button hitButton = hitButtonObject.GetComponent<Button>();
+        // hitButton.GetComponentInChildren<Text>().text = BlackjackConstants.hitButtonText; 
+        // hitButton.onClick.RemoveAllListeners();
+        // hitButton.onClick.AddListener(delegate { DealCard(blackjackPlayer, true); });
+		BlackjackUtils.InitialiseHitButton(blackjackButtonContainer, hitButtonObject, blackjackButtonPrefab); 
 
         // Create button for "standing" 
-        standButtonObject = Instantiate(blackjackButtonPrefab);
-		standButtonObject.name = "StandButton"; 
-        standButtonObject.transform.parent = blackjackButtonContainer.transform;
-		standButtonObject.SetActive(false); 
+        // standButtonObject = Instantiate(blackjackButtonPrefab);
+		// standButtonObject.name = BlackjackConstants.standButtonName; 
+        // standButtonObject.transform.parent = blackjackButtonContainer.transform;
+		// standButtonObject.SetActive(false); 
 
-        Button standButton = standButtonObject.GetComponent<Button>();
-        standButton.GetComponentInChildren<Text>().text = "Stand";
-        standButton.onClick.RemoveAllListeners();
-        standButton.onClick.AddListener(delegate { StandPlayer(); });
+        // Button standButton = standButtonObject.GetComponent<Button>();
+        // standButton.GetComponentInChildren<Text>().text = BlackjackConstants.standButtonText; 
+        // standButton.onClick.RemoveAllListeners();
+        // standButton.onClick.AddListener(delegate { StandPlayer(); });
+		BlackjackUtils.InitialiseStandButton(blackjackButtonContainer, standButtonObject, blackjackButtonPrefab); 
 
         // Create button for "splitting" (TBC) 
         // 
 
         // Create new game/quit buttons  
-        newGameButtonObject = Instantiate(blackjackButtonPrefab);
-		newGameButtonObject.name = "NewGameButton"; 
-        newGameButtonObject.transform.parent = blackjackButtonContainer.transform;
-		newGameButtonObject.SetActive(false); 
-        Button newGameButton = newGameButtonObject.GetComponent<Button>();
-        newGameButton.GetComponentInChildren<Text>().text = "Play again";
-		newGameButton.onClick.RemoveAllListeners(); 
-		newGameButton.onClick.AddListener(delegate { NewGame(); });  
+        // newGameButtonObject = Instantiate(blackjackButtonPrefab);
+		// newGameButtonObject.name = BlackjackConstants.newGameButtonName;  
+        // newGameButtonObject.transform.parent = blackjackButtonContainer.transform;
+		// newGameButtonObject.SetActive(false); 
+        // Button newGameButton = newGameButtonObject.GetComponent<Button>();
+        // newGameButton.GetComponentInChildren<Text>().text = BlackjackConstants.newGameButtonText;
+		// newGameButton.onClick.RemoveAllListeners(); 
+		// newGameButton.onClick.AddListener(delegate { NewGame(); });  
+		BlackjackUtils.InitialiseNewGameButton(blackjackButtonContainer, newGameButtonObject, blackjackButtonPrefab); 
 
-        quitGameButtonObject = Instantiate(blackjackButtonPrefab);
-		quitGameButtonObject.name = "QuitGameButton"; 
-        quitGameButtonObject.transform.parent = blackjackButtonContainer.transform;
-		quitGameButtonObject.SetActive(false); 
-        Button quitGameButton = quitGameButtonObject.GetComponent<Button>();
-        quitGameButton.GetComponentInChildren<Text>().text = "Leave table";
-		quitGameButton.onClick.RemoveAllListeners();
-		quitGameButton.onClick.AddListener(delegate { QuitGame(); }); 
+        // quitGameButtonObject = Instantiate(blackjackButtonPrefab);
+		// quitGameButtonObject.name = BlackjackConstants.quitGameButtonName;  
+        // quitGameButtonObject.transform.parent = blackjackButtonContainer.transform;
+		// quitGameButtonObject.SetActive(false); 
+        // Button quitGameButton = quitGameButtonObject.GetComponent<Button>();
+        // quitGameButton.GetComponentInChildren<Text>().text = BlackjackConstants.quitGameButtonText; 
+		// quitGameButton.onClick.RemoveAllListeners();
+		// quitGameButton.onClick.AddListener(delegate { QuitGame(); }); 
+		BlackjackUtils.InitialiseQuitGameButton(blackjackButtonContainer, quitGameButtonObject, blackjackButtonPrefab);
 
         blackjackDealer.isDealer = true; 
         Deck.InitialiseDeck();
@@ -244,12 +197,12 @@ public class BlackjackManager : MonoBehaviour
 	private void InitialiseNewSessionButton() 
 	{
 		newSessionButtonObject = Instantiate(blackjackButtonPrefab);
-		newSessionButtonObject.name = "NewBlackjackSessionButton"; 
+		newSessionButtonObject.name = BlackjackConstants.newSessionButtonName;  
 		newSessionButtonObject.transform.parent = gameObject.transform; 
-		newSessionButtonObject.transform.localPosition = new Vector2(0.5f, 0.5f); 
+		newSessionButtonObject.transform.localPosition = Vector2.one / 2f;  
 		
 		Button newSessionButton = newSessionButtonObject.GetComponent<Button>();
-        newSessionButton.GetComponentInChildren<Text>().text = "Play Blackjack";
+        newSessionButton.GetComponentInChildren<Text>().text = BlackjackConstants.newSessionButtonText; 
         newSessionButton.onClick.RemoveAllListeners();
         newSessionButton.onClick.AddListener(delegate { SetupTable(); });
 	} 
@@ -257,26 +210,26 @@ public class BlackjackManager : MonoBehaviour
 	// Tried to make creating the card container creation modular 
 	// But got NullReferenceException 
 	// Something to do with mutating the parameters? 
-	private void InitialiseCardContainer(GameObject cardContainer, GameObject totalObject, Text totalText, bool isDealer) 
-	{
-		string cardContainerName = isDealer ? "DealerCardContainer" : "PlayerCardContainer"; 
-		cardContainer = new GameObject(cardContainerName); 
+	// private void InitialiseCardContainer(GameObject cardContainer, GameObject totalObject, Text totalText, bool isDealer) 
+	// {
+		// string cardContainerName = isDealer ? "DealerCardContainer" : "PlayerCardContainer"; 
+		// cardContainer = new GameObject(cardContainerName); 
 		
-		cardContainer.transform.parent = blackjackTableContainer.transform;
-		RectTransform rectTransform = cardContainer.AddComponent<RectTransform>();
-        rectTransform.offsetMax = new Vector2(16f, 16f);
-        cardContainer.AddComponent<GridLayoutGroup>().cellSize = new Vector2(60, 84f);
-        //GridLayoutGroup gridLayoutGroup = playerCardContainer.AddComponent<GridLayoutGroup>();
-        //gridLayoutGroup.cellSize = new Vector2(60, 84f);
+		// cardContainer.transform.parent = blackjackTableContainer.transform;
+		// RectTransform rectTransform = cardContainer.AddComponent<RectTransform>();
+        // rectTransform.offsetMax = new Vector2(16f, 16f);
+        // cardContainer.AddComponent<GridLayoutGroup>().cellSize = new Vector2(60f, 84f);
+        // //GridLayoutGroup gridLayoutGroup = playerCardContainer.AddComponent<GridLayoutGroup>();
+        // //gridLayoutGroup.cellSize = new Vector2(60, 84f);
 		
-		string totalObjectName = isDealer ? "DealerTotalText" : "PlayerTotalText";
-        totalObject = new GameObject(totalObjectName);
+		// string totalObjectName = isDealer ? "DealerTotalText" : "PlayerTotalText";
+        // totalObject = new GameObject(totalObjectName);
 		
-        totalObject.transform.parent = cardContainer.transform;
-        totalText = totalObject.AddComponent<Text>();
-        totalText.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
-        totalText.color = Color.black;
-	}
+        // totalObject.transform.parent = cardContainer.transform;
+        // totalText = totalObject.AddComponent<Text>();
+        // totalText.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
+        // totalText.color = Color.black;
+	// }
 	
 	// Same problem with this method 
 	private void InitialiseWagerButtonObject(GameObject buttonObject, BlackjackPlayer _blackjackPlayer, int wager) 
@@ -339,13 +292,8 @@ public class BlackjackManager : MonoBehaviour
         blackjackDealer.hand = new List<Card>();
         blackjackDealer.isStanding = false;
         blackjackDealer.isBust = false; 
-        
-		// Display relevant buttons 
-		// hitButtonObject.SetActive(true);
-        // standButtonObject.SetActive(true); 
-        // newGameButtonObject.SetActive(false);
-        // quitGameButtonObject.SetActive(false);
 		
+		// Display relevant buttons 
 		foreach (Transform child in blackjackButtonContainer.transform) 
 		{
 			if (child.gameObject.name == "HitButton" || child.gameObject.name == "StandButton") 
@@ -365,7 +313,7 @@ public class BlackjackManager : MonoBehaviour
         DealCard(blackjackDealer, true);
 
 		gameInfoText.text = $"Current chips: {blackjackPlayer.chips} | Current wager: {blackjackPlayer.wager}"; 
-		dealerTotalText.text = "Dealer's total: ?"; 
+		dealerTotalText.text = BlackjackConstants.dealerUnknownTotalText;
     }
 	
 	private void QuitGame() 
