@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -8,6 +7,7 @@ using UnityEngine.UI;
 public static class Deck
 {
     public static List<Card> deck = new List<Card>();
+    public static List<Card> defaultDeck = new List<Card>();
     public static List<Card> drawnCards = new List<Card>();
     public static Sprite cardbackSprite;
     public static Sprite[] cardSprites;
@@ -21,25 +21,38 @@ public static class Deck
         cardSprites = Resources.LoadAll<Sprite>("Sprites/PlayingCards");
         int index = 0;
 
-        for (int i = 0; i < Enum.GetNames(typeof(Suits)).Length; i++)
+        for (int i = 0; i < 4; i++)
         {
             for (int j = 1; j <= 13; j++)
             {
                 int value = j < 10 ? j : 10;
-                deck.Add(new Card(value, false, cardSprites[index]));
+                defaultDeck.Add(new Card(value, false, cardSprites[index]));
                 index++;
             }
         }
+
+        deck = defaultDeck;
     }
 
     public static void ShuffleDeck()
     {
+        deck = defaultDeck;
+
         for (int i = 0; i < deck.Count; i++)
         {
-            int randomIndex = UnityEngine.Random.Range(0, deck.Count);
+            int randomIndex = Random.Range(0, deck.Count);
             Card temp = deck[i];
             deck[i] = deck[randomIndex];
             deck[randomIndex] = temp;
         }
+    }
+
+    public static Card GetRandomCard()
+    {
+        int randomIndex = Random.Range(0, deck.Count);
+        Card drawnCard = deck[randomIndex];
+        deck.RemoveAt(randomIndex);
+        drawnCards.Add(drawnCard);
+        return drawnCard;
     }
 }

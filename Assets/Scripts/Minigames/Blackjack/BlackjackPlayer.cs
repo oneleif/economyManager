@@ -15,4 +15,36 @@ public class BlackjackPlayer : ScriptableObject
     public bool isStanding;
     public bool isBust;
     public bool isDealer;
+
+    public void Init()
+    {
+        handTotal = 0;
+        hand = new List<Card>();
+        isStanding = false;
+        isBust = false;
+    }
+
+    public void AddCardToHand(Card cardToAdd)
+    {
+        hand.Add(cardToAdd);
+        handTotal += cardToAdd.value;
+
+        // Check if ace should be high or low, and adjust total value accordingly 
+        foreach (Card card in hand)
+        {
+            if (card.value == 1)
+            {
+                if (!card.isHigh && handTotal + 9 <= 21)
+                {
+                    card.isHigh = true;
+                    handTotal += 9;
+                }
+                else if (card.isHigh && handTotal > 21)
+                {
+                    card.isHigh = false;
+                    handTotal -= 9;
+                }
+            }
+        }
+    }
 }

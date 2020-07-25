@@ -1064,6 +1064,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 692b1fe2f81b58a42b7485f53343cdc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentContainer: {fileID: 1259725328}
   blackjackButtonPrefab: {fileID: 6405235083420301291, guid: 61786828ab639984480a6d0523f0b558,
     type: 3}
   blackjackPlayer: {fileID: 11400000, guid: 26a5a6cd267b053458a52643408aa7ee, type: 2}
