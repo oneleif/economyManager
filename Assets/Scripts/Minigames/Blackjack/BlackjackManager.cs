@@ -24,10 +24,9 @@ public class BlackjackManager : MonoBehaviour
 	private GameObject quitGameButtonObject;
 
 	// Wager buttons
-	private GameObject wager100Object;
-	private GameObject wager500Object;
-	private GameObject wager1000Object;
-	private GameObject wager5000Object;
+	private GameObject lowWagerObject;
+	private GameObject mediumWagerObject;
+	private GameObject highWagerObject;
 
 	// Game Info
 	private Text gameInfo;
@@ -35,7 +34,6 @@ public class BlackjackManager : MonoBehaviour
 	private Text dealerTotal;
 
 	// Scriptable objects 
-	[SerializeField]
     public BlackjackPlayer blackjackPlayer;
     public BlackjackPlayer blackjackDealer;
 
@@ -47,7 +45,7 @@ public class BlackjackManager : MonoBehaviour
 	private void Start()
     {
         InitialiseNewSessionButton(); 
-		blackjackPlayer.chips = 2500; 
+		blackjackPlayer.chips = BlackjackConstants.playerStartingChips;
     }
 
 	public void InitialiseNewSessionButton()
@@ -69,18 +67,16 @@ public class BlackjackManager : MonoBehaviour
         BlackjackUtils.InitialiseHeader(blackjackTableContainer);
 		gameInfo = BlackjackUtils.InitialiseGameInfo(blackjackTableContainer, blackjackPlayer);
 
-		playerCardContainer = BlackjackUtils.InitialiseCardContainer(blackjackTableContainer, false);
-		playerTotal = BlackjackUtils.InitializeTotalText(playerCardContainer, false);
-		dealerCardContainer = BlackjackUtils.InitialiseCardContainer(blackjackTableContainer, true);
-		dealerTotal = BlackjackUtils.InitializeTotalText(dealerCardContainer, true);
+		playerCardContainer = BlackjackUtils.InitialiseCardContainer(blackjackTableContainer, isDealer: false);
+		playerTotal = BlackjackUtils.InitializeTotalText(playerCardContainer, isDealer: false);
+		dealerCardContainer = BlackjackUtils.InitialiseCardContainer(blackjackTableContainer, isDealer: true);
+		dealerTotal = BlackjackUtils.InitializeTotalText(dealerCardContainer, isDealer: true);
 
-		//// Create container object for all in-game buttons 
 		blackjackButtonContainer = BlackjackUtils.InitialiseButtonContainer(blackjackTableContainer);
 
-		wager100Object = InitialiseWagerButtonObject(wager: 100);
-		wager500Object = InitialiseWagerButtonObject(wager: 500);
-		wager1000Object = InitialiseWagerButtonObject(wager: 1000);
-		wager5000Object = InitialiseWagerButtonObject(wager: 5000);
+		lowWagerObject = InitialiseWagerButtonObject(BlackjackConstants.lowWager);
+		mediumWagerObject = InitialiseWagerButtonObject(BlackjackConstants.mediumWager);
+		highWagerObject = InitialiseWagerButtonObject(BlackjackConstants.highWager);
 
         hitButtonObject = InitializePlayButton(blackjackButtonContainer, blackjackButtonPrefab, PlayButtonType.Hit);
         standButtonObject = InitializePlayButton(blackjackButtonContainer, blackjackButtonPrefab, PlayButtonType.Stand);
@@ -105,22 +101,21 @@ public class BlackjackManager : MonoBehaviour
 
 	private void HandleWager(int wager)
 	{
-		//Toggle off wager buttons
-		wager100Object.SetActive(false);
-		wager500Object.SetActive(false);
-		wager1000Object.SetActive(false);
-		wager5000Object.SetActive(false);
-
 		if (wager <= blackjackPlayer.chips)
 		{
 			blackjackPlayer.wager = wager;
-
+			
+			//Toggle off wager buttons
+			lowWagerObject.SetActive(false);
+			mediumWagerObject.SetActive(false);
+			highWagerObject.SetActive(false);
+			
 			// Game begins once player has wagered 
 			NewGame();
         }
         else
         {
-			// TODO: handle if the player doesnt have enough money
+			gameInfo.text = $"Insufficient chips! You have {blackjackPlayer.chips} remaining."; 
         }
 	}
 
@@ -306,7 +301,7 @@ public class BlackjackManager : MonoBehaviour
 			case PlayButtonType.QuitGame:
 				return BlackjackConstants.quitGameButtonName;
 			default:
-				Debug.Log("you fucked up");
+				Debug.Log("Button type does not exist.");
 				return "";
 		}
 	}
@@ -324,7 +319,7 @@ public class BlackjackManager : MonoBehaviour
 			case PlayButtonType.QuitGame:
 				return BlackjackConstants.quitGameButtonText;
 			default:
-				Debug.Log("you fucked up");
+				Debug.Log("Button type does not exist.");
 				return "";
 		}
 	}
