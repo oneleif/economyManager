@@ -8,7 +8,6 @@ public static class Deck
 {
     public static List<Card> deck = new List<Card>();
     public static List<Card> defaultDeck = new List<Card>();
-    public static List<Card> drawnCards = new List<Card>();
     public static Sprite cardbackSprite;
     public static Sprite[] cardSprites;
 
@@ -31,12 +30,25 @@ public static class Deck
             }
         }
 
-        deck = defaultDeck;
+        // Otherwise we are only copying the reference
+        DeepCopyDefaultDeck(); 
+    }
+
+    private static void DeepCopyDefaultDeck()
+    {
+        // Can we do this without re-declaring the non-default deck?
+        // Tried for loop with deck.Insert(i, defaultDeck[i]) but got weird result
+        deck = new List<Card>();
+
+        foreach (Card card in defaultDeck)
+        {
+            deck.Add(card);
+        }
     }
 
     public static void ShuffleDeck()
     {
-        deck = defaultDeck;
+        DeepCopyDefaultDeck(); 
 
         for (int i = 0; i < deck.Count; i++)
         {
@@ -52,7 +64,6 @@ public static class Deck
         int randomIndex = Random.Range(0, deck.Count);
         Card drawnCard = deck[randomIndex];
         deck.RemoveAt(randomIndex);
-        drawnCards.Add(drawnCard);
         return drawnCard;
     }
 }

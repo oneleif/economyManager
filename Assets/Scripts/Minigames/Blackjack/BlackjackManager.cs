@@ -104,11 +104,7 @@ public class BlackjackManager : MonoBehaviour
 		if (wager <= blackjackPlayer.chips)
 		{
 			blackjackPlayer.wager = wager;
-			
-			//Toggle off wager buttons
-			lowWagerObject.SetActive(false);
-			mediumWagerObject.SetActive(false);
-			highWagerObject.SetActive(false);
+			blackjackPlayer.chips -= blackjackPlayer.wager;
 			
 			// Game begins once player has wagered 
 			NewGame();
@@ -121,11 +117,9 @@ public class BlackjackManager : MonoBehaviour
 
 	private void NewGame()
 	{
-		blackjackPlayer.chips -= blackjackPlayer.wager;
-
 		Deck.ShuffleDeck();
 
-        DestroyChildCardObjects(playerCardContainer.transform);
+		DestroyChildCardObjects(playerCardContainer.transform);
         DestroyChildCardObjects(dealerCardContainer.transform);
 
         blackjackPlayer.Init();
@@ -198,11 +192,14 @@ public class BlackjackManager : MonoBehaviour
         if (playerWins)
 		{
 			blackjackPlayer.chips += 2 * blackjackPlayer.wager;
-            gameInfo.text = $"Player wins {blackjackPlayer.wager} chips!";
+
+			// Since the player has to wager after each round now, 
+			// we need to display their available chips 
+            gameInfo.text = $"Player wins {blackjackPlayer.wager} chips! Current stack: {blackjackPlayer.chips}";
         }
 		else
 		{
-            gameInfo.text = $"Player loses {blackjackPlayer.wager} chips!";
+            gameInfo.text = $"Player loses {blackjackPlayer.wager} chips! Current stack: {blackjackPlayer.chips}";
         }
 	}
 
@@ -210,13 +207,15 @@ public class BlackjackManager : MonoBehaviour
     {
 		hitButtonObject.SetActive(inGame);
 		standButtonObject.SetActive(inGame);
-		newGameButtonObject.SetActive(!inGame);
+		lowWagerObject.SetActive(!inGame);
+		mediumWagerObject.SetActive(!inGame);
+		highWagerObject.SetActive(!inGame); 
 		quitGameButtonObject.SetActive(!inGame);
 	}
 
 	private void Update()
 	{
-		// Check if it's dealer's turn to draw cards 
+		// Check if it's the dealer's turn to draw cards 
 		if (blackjackPlayer.isStanding && !blackjackDealer.isBust)
 		{
 			DealCard(blackjackDealer, true);
