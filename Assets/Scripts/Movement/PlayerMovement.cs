@@ -11,12 +11,21 @@ public class PlayerMovement : MonoBehaviour
     private float movementSpeed = 10f;
 
     public static Vector2 movementVector; 
+    
+    //enum Direction
+    //{
+    //    left, right, up, down, upleft, etc
+    //}
 
     // Get input in Update 
     private void Update()
     {
         movementVector.x = Input.GetAxisRaw("Horizontal");
         movementVector.y = Input.GetAxisRaw("Vertical");
+        //if(movementVector.y > 0 && movementVector.x == 0)
+        //{
+
+        //}
     }
 
     // Move player in FixedUpdate 
@@ -27,7 +36,7 @@ public class PlayerMovement : MonoBehaviour
         {
             movementVector /= movementVector.magnitude;
         }
-
+        //spriteAnimator.setanim(direction);
         gameObject.transform.position += new Vector3(movementVector.x, movementVector.y, 0f) * movementSpeed * Time.fixedDeltaTime;
     }
 }
