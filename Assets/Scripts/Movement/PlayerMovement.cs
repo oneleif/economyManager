@@ -10,33 +10,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private float movementSpeed = 10f;
 
-    private Sprite[] sprites = Resources.LoadAll<Sprite>("Sprites/PlayerCharacter");
-    private KeyCode[] movementKeys = new KeyCode[4] { KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D }; 
-
     public static Vector2 movementVector; 
-
-    private void Start()
-    {
-        
-    }
-
-    private void IsKeyIsolated(KeyCode isolatedKey)
-    {
-        foreach (KeyCode key in movementKeys)
-        {
-            if (Input.GetKeyDown(key))
-            {
-
-            }
-        }
-    }
 
     // Get input in Update 
     private void Update()
     {
         movementVector.x = Input.GetAxisRaw("Horizontal");
-        movementVector.y = Input.GetAxisRaw("Vertical"); 
-        
+        movementVector.y = Input.GetAxisRaw("Vertical");
     }
 
     // Move player in FixedUpdate 
@@ -49,8 +29,5 @@ public class PlayerMovement : MonoBehaviour
         }
 
         gameObject.transform.position += new Vector3(movementVector.x, movementVector.y, 0f) * movementSpeed * Time.fixedDeltaTime;
-
-        //if (Input.GetKeyDown(KeyCode.W) && !Input.GetKeyDown(KeyCode.A))
-
     }
 }

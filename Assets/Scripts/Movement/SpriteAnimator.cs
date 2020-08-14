@@ -1,131 +1,123 @@
 ﻿using System; 
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class SpriteAnimator : MonoBehaviour
 {
     SpriteRenderer spriteRenderer;
 
-    // The sprites displayed when stationary  
-    private Sprite upStationary;
-    private Sprite leftStationary; 
-    private Sprite downStationary;
-    private Sprite rightStationary;
-
     // The sprites to loop through when moving  
-    public Sprite[] upFrames; 
-    public Sprite[] leftFrames;
+    public Sprite[] upFrames;
     public Sprite[] downFrames; 
     public Sprite[] rightFrames;
 
     // Stores the currently looping sprites 
-    private Sprite[] frameArray; 
+    private Sprite[] frameArray;
+
+    // The sprites displayed when stationary  
+    // Indices are: 0 for facing down, 1 for facing up 
+    public Sprite[] stationaryFrames;
+
+    // Stores the current stationary sprite
+    private Sprite stationaryPosition;  
+
+    [SerializeField]
+    private float frameRate = 0.1f;
 
     private int currentFrame;
-    private float frameRate = 0.1f;
     private float timer;
-    private bool isPlaying = true; 
-    private bool isLooping = false; 
+
+    private bool flipped; 
 
     void Start()
     {
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
 
-        //downStationary = Resources.Load<Sprite>("Sprites/PlayerCharacter/pixel-16x16 (1).png");
-        //upStationary = Resources.Load<Sprite>("Sprites/PlayerCharacter/pixel-16x16 (4).png"); 
+        // Default stationary position is facing down 
+        stationaryPosition = stationaryFrames[0]; 
+        spriteRenderer.sprite = stationaryPosition; 
 
-        //// We can copy the reference here as we are not transforming this sprite 
-        //rightStationary = downStationary;
-
-        //leftStationary = Resources.Load<Sprite>("Sprites/PlayerCharacter/pixel-16x16 (1).png"); 
-
-
-
-        //downFrames[0] = Resources.Load<Sprite>("Sprites/PlayerCharacter/pixel-16x16 (2).png");
-        //downFrames[1] = Resources.Load<Sprite>("Sprites/PlayerCharacter/pixel-16x16 (3).png");
-        //upFrames[0] = Resources.Load<Sprite>("Sprites/PlayerCharacter/pixel-16x16 (5).png"); 
-        //upFrames[1] = Resources.Load<Sprite>("Sprites/PlayerCharacter/pixel-16x16 (6).png");
-        //rightFrames[0] = Resources.Load<Sprite>("Sprites/PlayerCharacter/pixel-16x16 (7).png");
-        //rightFrames[0] = Resources.Load<Sprite>("Sprites/PlayerCharacter/pixel-16x16 (8).png");
     }
 
     void FixedUpdate()
     {
         if (PlayerMovement.movementVector == Vector2.zero)
         {
-            return; 
+            spriteRenderer.sprite = stationaryPosition; 
         }
-
-        if (Input.GetKeyDown(KeyCode.D))
+        else
         {
-            frameArray = rightFrames;
+            if (PlayerMovement.movementVector == Vector2.up)
+            {
+                frameArray = upFrames;
+                stationaryPosition = stationaryFrames[1]; 
+                flipped = false; 
 
-            //if (Input.GetKeyUp(KeyCode.D))
-            //{
-            //    isPlaying = false; 
-            //}
-        }
-        else if (Input.GetKeyDown(KeyCode.W))
-        {
-            frameArray = upFrames; 
-        }
+            }
+            else if (PlayerMovement.movementVector == Vector2.left)
+            {
+                frameArray = rightFrames;
+                stationaryPosition = stationaryFrames[0]; 
+                flipped = true; 
+            }
+            else if (PlayerMovement.movementVector == Vector2.down)
+            {
+                frameArray = downFrames;
+                stationaryPosition = stationaryFrames[0]; 
+                flipped = false; 
+            }
+            else if (PlayerMovement.movementVector == Vector2.right)
+            {
+                frameArray = rightFrames;
+                stationaryPosition = stationaryFrames[0];
+                flipped = false; 
+            }
 
-        //if (!isPlaying)
-        //{
-        //    return;
-        //}
+            timer += Time.fixedDeltaTime;
 
-        timer += Time.fixedDeltaTime;
+            // Do something every "frame",
+            // according to the frameRate defined above 
+            if (timer >= frameRate)
+            {
+                timer -= frameRate;
 
-        // Do something every "frame",
-        // according to the frameRate defined above 
-        if (timer >= frameRate)
-        {
-            timer -= frameRate;
+                // Reset currentFrame to 0 when it reaches the length of the array 
+                currentFrame = (currentFrame + 1) % frameArray.Length;
 
-            // Reset currentFrame to 0 when it reaches the length of the array 
-            currentFrame = (currentFrame + 1) % frameArray.Length;
+                // Flip sprite if moving left 
+                spriteRenderer.flipX = flipped ? true : false; 
 
-            //if (PlayerMovement.movementVector == Vector2.zero)
-            //{
-            //    isPlaying = false; 
-            //}
-            //else
-            //{
-            //    spriteRenderer.sprite = frameArray[currentFrame];
-            //}
-
-            spriteRenderer.sprite = frameArray[currentFrame]; 
+                // Update the sprite being renderer
+                spriteRenderer.sprite = frameArray[currentFrame]; 
+            }
         }
     }
 
-    private IEnumerator PlayAnimation(KeyCode key)
+    // Would be cleaner to get the corresponding frame array here.
+    // But how do we set this up to account for stationary sprites?
+    private Sprite[] GetFrameArray(Vector2 movementVector)
     {
-
-
-        while (Input.GetKeyDown(key))
+        if (movementVector == Vector2.up)
         {
-            // Play corresponding animation
-
-            // Indefinite cycle through the sprites 
-            yield return null; 
+            return upFrames; 
+        }   
+        else if (movementVector == Vector2.left)
+        {
+            return rightFrames; 
         }
-
-        //switch(key)
-        //{
-
-        //}
+        else if (movementVector == Vector2.down)
+        {
+            return downFrames;
+        }
+        else if (movementVector == Vector2.right)
+        {
+            return rightFrames;
+        }
+        else
+        {
+            return new Sprite[0]; 
+        }
     }
-
-    //private void PlayAnimation()
-    //{
-
-    //}
-
-    private void ToggleAnimation(bool play)
-    {
-        isPlaying = play;
-    }
-
 }
