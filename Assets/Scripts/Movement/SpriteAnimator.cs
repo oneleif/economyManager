@@ -29,7 +29,9 @@ public class SpriteAnimator : MonoBehaviour
     private int currentFrame;
     private float timer;
 
-    private bool flipped; 
+    private bool flipped;
+
+    public static Direction direction; 
 
     void Start()
     {
@@ -49,32 +51,8 @@ public class SpriteAnimator : MonoBehaviour
         }
         else
         {
-            if (PlayerMovement.movementVector == Vector2.up)
-            {
-                frameArray = upFrames;
-                stationaryPosition = stationaryFrames[1]; 
-                flipped = false; 
-
-            }
-            else if (PlayerMovement.movementVector == Vector2.left)
-            {
-                frameArray = rightFrames;
-                stationaryPosition = stationaryFrames[0]; 
-                flipped = true; 
-            }
-            else if (PlayerMovement.movementVector == Vector2.down)
-            {
-                frameArray = downFrames;
-                stationaryPosition = stationaryFrames[0]; 
-                flipped = false; 
-            }
-            else if (PlayerMovement.movementVector == Vector2.right)
-            {
-                frameArray = rightFrames;
-                stationaryPosition = stationaryFrames[0];
-                flipped = false; 
-            }
-
+            UpdateFrameArray(); 
+                
             timer += Time.fixedDeltaTime;
 
             // Do something every "frame",
@@ -95,29 +73,51 @@ public class SpriteAnimator : MonoBehaviour
         }
     }
 
-    // Would be cleaner to get the corresponding frame array here.
-    // But how do we set this up to account for stationary sprites?
-    private Sprite[] GetFrameArray(Vector2 movementVector)
+    private void UpdateFrameArray()
     {
-        if (movementVector == Vector2.up)
+        // Ugliest switch block in existence 
+        switch (direction)
         {
-            return upFrames; 
-        }   
-        else if (movementVector == Vector2.left)
-        {
-            return rightFrames; 
-        }
-        else if (movementVector == Vector2.down)
-        {
-            return downFrames;
-        }
-        else if (movementVector == Vector2.right)
-        {
-            return rightFrames;
-        }
-        else
-        {
-            return new Sprite[0]; 
+            case Direction.up:
+                frameArray = upFrames;
+                stationaryPosition = stationaryFrames[1];
+                flipped = false;
+                break;
+            case Direction.upleft:
+                frameArray = rightFrames;
+                stationaryPosition = stationaryFrames[1];
+                flipped = true;
+                break;
+            case Direction.left:
+                frameArray = rightFrames;
+                stationaryPosition = stationaryFrames[0];
+                flipped = true;
+                break;
+            case Direction.downleft:
+                frameArray = rightFrames;
+                stationaryPosition = stationaryFrames[0];
+                flipped = true;
+                break;
+            case Direction.down:
+                frameArray = downFrames;
+                stationaryPosition = stationaryFrames[0];
+                flipped = false;
+                break;
+            case Direction.downright:
+                frameArray = rightFrames;
+                stationaryPosition = stationaryFrames[0];
+                flipped = false;
+                break;
+            case Direction.right:
+                frameArray = rightFrames;
+                stationaryPosition = stationaryFrames[0];
+                flipped = false;
+                break;
+            case Direction.upright:
+                frameArray = upFrames;
+                stationaryPosition = stationaryFrames[1];
+                flipped = false;
+                break;
         }
     }
 }
