@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public enum Direction
 {
@@ -10,12 +11,14 @@ public enum Direction
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField]
-    private SpriteAnimator spriteAnimator; 
+    private SpriteAnimator spriteAnimator;
 
     [SerializeField]
-    private float movementSpeed = 10f;
+    private float movementSpeed = 100f;  
 
     public static Vector2 movementVector;
+
+    public Camera mainCamera; 
 
     // Get input in Update 
     private void Update()
@@ -24,6 +27,7 @@ public class PlayerMovement : MonoBehaviour
         movementVector.y = Input.GetAxisRaw("Vertical");
 
         SetDirection();
+        LogMovementData(); 
     }
 
     // Move player in FixedUpdate 
@@ -34,8 +38,11 @@ public class PlayerMovement : MonoBehaviour
         {
             movementVector /= movementVector.magnitude;
         }
+
         //spriteAnimator.setanim(direction);
-        gameObject.transform.position += new Vector3(movementVector.x, movementVector.y, 0f) * movementSpeed * Time.fixedDeltaTime;
+
+        MovePlayer(); 
+
     }
 
     private void SetDirection()
@@ -72,5 +79,30 @@ public class PlayerMovement : MonoBehaviour
         {
             SpriteAnimator.direction = Direction.upright;
         }
+    }
+
+    private void LogMovementData()
+    {
+        Debug.Log("Movement vector: " + movementVector);
+        Debug.Log("Movement speed: " + movementSpeed);
+
+        Debug.Log("Camera xMin: " + mainCamera.rect.xMin);
+        Debug.Log("Camera xMax: " + mainCamera.rect.xMax);
+        Debug.Log("Camera yMin: " + mainCamera.rect.yMin);
+        Debug.Log("Camera yMax: " + mainCamera.rect.yMax);
+    }
+
+    private void MovePlayer()
+    { 
+        Vector3 newPosition = gameObject.transform.position + new Vector3(movementVector.x, movementVector.y, 0f) 
+            * movementSpeed * Time.fixedDeltaTime;
+
+        gameObject.transform.position = newPosition;
+
+        // Clamp character to current room  
+        //gameObject.transform.position = new Vector3(
+        //    Mathf.Clamp(newPosition.x, mainCamera.rect.xMin, mainCamera.rect.xMax),
+        //    Mathf.Clamp(newPosition.y, mainCamera.rect.yMin, mainCamera.rect.yMax),
+        //    0f); 
     }
 }

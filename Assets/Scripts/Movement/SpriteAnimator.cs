@@ -8,8 +8,12 @@ public class SpriteAnimator : MonoBehaviour
 {
     SpriteRenderer spriteRenderer;
 
+    [SerializeField]
+    private float frameRate = 0.15f;
+
     // The sprites to loop through when moving  
     public Sprite[] upFrames;
+    public Sprite[] leftFrames;
     public Sprite[] downFrames; 
     public Sprite[] rightFrames;
 
@@ -17,18 +21,14 @@ public class SpriteAnimator : MonoBehaviour
     private Sprite[] frameArray;
 
     // The sprites displayed when stationary  
-    // Indices are: 0 for facing down, 1 for facing up 
+    // Indices are: 0-3 WASD
     public Sprite[] stationaryFrames;
 
     // Stores the current stationary sprite
     private Sprite stationaryPosition;  
-
-    [SerializeField]
-    private float frameRate = 0.1f;
-
+    
     private int currentFrame;
     private float timer;
-
     private bool flipped;
 
     public static Direction direction; 
@@ -38,8 +38,13 @@ public class SpriteAnimator : MonoBehaviour
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
 
         // Default stationary position is facing down 
-        stationaryPosition = stationaryFrames[0]; 
-        spriteRenderer.sprite = stationaryPosition; 
+        stationaryPosition = stationaryFrames[2]; 
+        spriteRenderer.sprite = stationaryPosition;
+
+        // Set frame rate proportionally to movement speed 
+        // Enable this when not Serialized
+        // And set movementSpeed to static member*
+        //frameRate = PlayerMovement.movementSpeed / 1000; 
 
     }
 
@@ -73,6 +78,8 @@ public class SpriteAnimator : MonoBehaviour
         }
     }
 
+    // Assign frameArray to the frames corresponding to 
+    // the player's current direction 
     private void UpdateFrameArray()
     {
         // Ugliest switch block in existence 
@@ -80,42 +87,42 @@ public class SpriteAnimator : MonoBehaviour
         {
             case Direction.up:
                 frameArray = upFrames;
-                stationaryPosition = stationaryFrames[1];
+                stationaryPosition = stationaryFrames[0];
                 flipped = false;
                 break;
             case Direction.upleft:
-                frameArray = rightFrames;
+                frameArray = leftFrames;
                 stationaryPosition = stationaryFrames[1];
-                flipped = true;
+                flipped = false;
                 break;
             case Direction.left:
-                frameArray = rightFrames;
-                stationaryPosition = stationaryFrames[0];
-                flipped = true;
+                frameArray = leftFrames;
+                stationaryPosition = stationaryFrames[1];
+                flipped = false;
                 break;
             case Direction.downleft:
-                frameArray = rightFrames;
-                stationaryPosition = stationaryFrames[0];
-                flipped = true;
+                frameArray = leftFrames;
+                stationaryPosition = stationaryFrames[1];
+                flipped = false;
                 break;
             case Direction.down:
                 frameArray = downFrames;
-                stationaryPosition = stationaryFrames[0];
+                stationaryPosition = stationaryFrames[2];
                 flipped = false;
                 break;
             case Direction.downright:
                 frameArray = rightFrames;
-                stationaryPosition = stationaryFrames[0];
+                stationaryPosition = stationaryFrames[3];
                 flipped = false;
                 break;
             case Direction.right:
                 frameArray = rightFrames;
-                stationaryPosition = stationaryFrames[0];
+                stationaryPosition = stationaryFrames[3];
                 flipped = false;
                 break;
             case Direction.upright:
-                frameArray = upFrames;
-                stationaryPosition = stationaryFrames[1];
+                frameArray = rightFrames;
+                stationaryPosition = stationaryFrames[3];
                 flipped = false;
                 break;
         }
