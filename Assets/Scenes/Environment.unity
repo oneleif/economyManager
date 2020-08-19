@@ -156,8 +156,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteAnimator: {fileID: 271618571}
-  movementSpeed: 100
-  mainCamera: {fileID: 2114277078}
+  maximumSpeed: 100
+  acceleration: 10
 --- !u!50 &271618568
 Rigidbody2D:
   serializedVersion: 4

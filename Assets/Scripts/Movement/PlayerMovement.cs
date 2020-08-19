@@ -10,15 +10,13 @@ public enum Direction
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField]
-    private SpriteAnimator spriteAnimator;
+    [SerializeField] private SpriteAnimator spriteAnimator;
 
-    [SerializeField]
-    private float movementSpeed = 100f;  
+    private float currentSpeed = 0f;
+    [SerializeField] private float maximumSpeed = 100f;
+    [SerializeField] private float acceleration = 10f; 
 
     public static Vector2 movementVector;
-
-    public Camera mainCamera; 
 
     // Get input in Update 
     private void Update()
@@ -27,7 +25,6 @@ public class PlayerMovement : MonoBehaviour
         movementVector.y = Input.GetAxisRaw("Vertical");
 
         SetDirection();
-        LogMovementData(); 
     }
 
     // Move player in FixedUpdate 
@@ -38,8 +35,6 @@ public class PlayerMovement : MonoBehaviour
         {
             movementVector /= movementVector.magnitude;
         }
-
-        //spriteAnimator.setanim(direction);
 
         MovePlayer(); 
 
@@ -81,28 +76,26 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void MovePlayer()
+    {
+        if (currentSpeed < maximumSpeed)
+        {
+            currentSpeed += acceleration; 
+        }
+
+        if (movementVector == Vector2.zero)
+        {
+            currentSpeed = 0f;
+        }
+
+        gameObject.transform.position += new Vector3(movementVector.x, movementVector.y, 0f) 
+            * currentSpeed * Time.fixedDeltaTime; 
+    }
+
     private void LogMovementData()
     {
         Debug.Log("Movement vector: " + movementVector);
-        Debug.Log("Movement speed: " + movementSpeed);
-
-        Debug.Log("Camera xMin: " + mainCamera.rect.xMin);
-        Debug.Log("Camera xMax: " + mainCamera.rect.xMax);
-        Debug.Log("Camera yMin: " + mainCamera.rect.yMin);
-        Debug.Log("Camera yMax: " + mainCamera.rect.yMax);
-    }
-
-    private void MovePlayer()
-    { 
-        Vector3 newPosition = gameObject.transform.position + new Vector3(movementVector.x, movementVector.y, 0f) 
-            * movementSpeed * Time.fixedDeltaTime;
-
-        gameObject.transform.position = newPosition;
-
-        // Clamp character to current room  
-        //gameObject.transform.position = new Vector3(
-        //    Mathf.Clamp(newPosition.x, mainCamera.rect.xMin, mainCamera.rect.xMax),
-        //    Mathf.Clamp(newPosition.y, mainCamera.rect.yMin, mainCamera.rect.yMax),
-        //    0f); 
+        Debug.Log("Current speed: " + currentSpeed);
+        Debug.Log("Maximum speed: " + maximumSpeed);
     }
 }
