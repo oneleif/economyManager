@@ -5,24 +5,35 @@ using UnityEngine.EventSystems;
 
 public class DragNDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
-    [SerializeField] private Canvas mainCanvas;
-    [SerializeField] private GameObject schedule;
-    [SerializeField] private Job job;
+    private GameObject mainCanvas;
+    public GameObject schedule;
+    public GameObject testSchedule; 
+    public Job job;
 
     private CanvasGroup canvasGroup;
     private RectTransform rectTransform;
 
-    private Vector2 startingPosition = new Vector2(0f, 0f);
-
-
     private void Start()
     {
+        mainCanvas = GameObject.Find("Canvas");
+        //schedule = GameObject.Find("ScheduleContainer"); 
+        //testSchedule = GameObject.Find("TestSchedule");
         rectTransform = GetComponent<RectTransform>();
-        canvasGroup = GetComponent<CanvasGroup>(); 
+        canvasGroup = GetComponent<CanvasGroup>();
+
+        Debug.Log("Test Schedule position: " + testSchedule.transform.position); 
+    }
+
+    private void Update()
+    {
+        //Debug.Log("Job Rect: " + rectTransform.rect.position);
+        //Debug.Log("Sched Rect: " + schedule.GetComponent<RectTransform>().rect); 
+
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        Debug.Log("OnBeginDrag fired.");
         canvasGroup.alpha = JobConstants.dragAlpha; 
         canvasGroup.blocksRaycasts = false; 
     }
@@ -31,17 +42,17 @@ public class DragNDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDra
     {
         // Delta is distance that the mouse moved since previous frame
         // Divide by canvas scale factor to prevent object from overshooting 
-        rectTransform.anchoredPosition += eventData.delta / mainCanvas.scaleFactor;
-
+        rectTransform.anchoredPosition += eventData.delta / mainCanvas.GetComponent<Canvas>().scaleFactor;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        Debug.Log("EndDrag event data position: " + eventData.position);
 
         // Return to starting position if not scheduled 
         if (!IsInsideSchedule())
         {
-            gameObject.transform.position = startingPosition;
+            gameObject.transform.position = job.startingPosition;
         }
 
         // Raycast will pass through and hit the schedule 
@@ -62,6 +73,7 @@ public class DragNDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDra
             rectTransform.position.y <= scheduleRectTransform.position.y && 
             rectTransform.position.y + rectTransform.rect.size.x >= scheduleRectTransform.position.x + scheduleRectTransform.rect.size.x)
         {
+            Debug.Log("IsInsideSchedule."); 
             return true; 
         }
 

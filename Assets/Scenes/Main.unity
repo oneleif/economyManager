@@ -1707,8 +1707,9 @@ GameObject:
   - component: {fileID: 1155069729}
   - component: {fileID: 1155069728}
   - component: {fileID: 1155069727}
+  - component: {fileID: 1155069730}
   m_Layer: 5
-  m_Name: Image
+  m_Name: TestJob
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1745,7 +1746,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b9e3bd8e5994e843bbd1eb534aecc90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCanvas: {fileID: 397848414}
+  schedule: {fileID: 2003779252}
+  testSchedule: {fileID: 2003779252}
+  job: {fileID: 11400000, guid: 4fa18531a598b6548954faa714001b95, type: 2}
 --- !u!114 &1155069728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1784,6 +1787,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1155069725}
   m_CullTransparentMesh: 0
+--- !u!225 &1155069730
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1155069725}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1238292060
 GameObject:
   m_ObjectHideFlags: 0
@@ -2331,6 +2346,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1732100812}
   - component: {fileID: 1732100813}
+  - component: {fileID: 1732100816}
   - component: {fileID: 1732100815}
   - component: {fileID: 1732100814}
   m_Layer: 5
@@ -2419,6 +2435,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1732100811}
   m_CullTransparentMesh: 0
+--- !u!114 &1732100816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1732100811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d32c6b9baa2e5dd4bb3971083a7bd185, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jobsContainer: {fileID: 11400000, guid: 4156fd034cd27214292fc243f1e402ae, type: 2}
+  jobPrefab: {fileID: 0}
 --- !u!850595691 &1791643464
 LightingSettings:
   m_ObjectHideFlags: 0
@@ -2494,7 +2524,7 @@ GameObject:
   - component: {fileID: 2003779256}
   - component: {fileID: 2003779257}
   m_Layer: 0
-  m_Name: JobSchedule
+  m_Name: TestSchedule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2532,7 +2562,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
