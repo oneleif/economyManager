@@ -19,14 +19,16 @@ public class JobsUI : MonoBehaviour
 
     private void Start()
     {
-        //containerBackgroundSprite = Resources.Load<Sprite>("Sprites/ScheduleBackground.png");
-        //scheduleSlotSprite = Resources.Load<Sprite>("Sprites/ScheduleSlot.png");
-        //jobSprite = Resources.Load<Sprite>("Sprites/Briefcase.png"); 
+        Debug.Log("JobsContainer length: " + jobsContainer.jobsContainer.Length);
 
-        //availableJobsContainer = InitialiseAvailableJobsContainer();
-        //scheduleContainer = InitialiseScheduleContainer(); 
-        //AddAvailableJobs();
-        
+        containerBackgroundSprite = Resources.Load<Sprite>("Sprites/ScheduleBackground.png");
+        scheduleSlotSprite = Resources.Load<Sprite>("Sprites/ScheduleSlot.png");
+        jobSprite = Resources.Load<Sprite>("Sprites/Briefcase.png");
+
+        availableJobsContainer = InitialiseAvailableJobsContainer();
+        scheduleContainer = InitialiseScheduleContainer();
+        AddAvailableJobs();
+
     }
 
     private void Update()
@@ -46,7 +48,10 @@ public class JobsUI : MonoBehaviour
         RectTransform rectTransform = containerObject.GetComponent<RectTransform>();
         rectTransform.anchorMin = JobConstants.availableJobsContainerAnchorMin;
         rectTransform.anchorMax = JobConstants.availableJobsContainerAnchorMax;
+        rectTransform.localPosition = new Vector2(-1f, 0f);
         rectTransform.localScale = new Vector2(0.75f, 0.75f);
+        rectTransform.offsetMin = Vector2.zero;
+        rectTransform.offsetMax = Vector2.zero;
 
         GridLayoutGroup gridLayoutGroup = containerObject.AddComponent<GridLayoutGroup>();
         gridLayoutGroup.startCorner = GridLayoutGroup.Corner.UpperLeft;
@@ -69,9 +74,12 @@ public class JobsUI : MonoBehaviour
         scheduleObject.AddComponent<Schedule>(); 
 
         RectTransform rectTransform = scheduleObject.GetComponent<RectTransform>();
+        rectTransform.localPosition = new Vector2(0.5f, 0f);
         rectTransform.anchorMin = JobConstants.scheduleContainerAnchorMin;
         rectTransform.anchorMax = JobConstants.scheduleContainerAnchorMax;
         rectTransform.localScale = JobConstants.scheduleContainerLocalScale;
+        rectTransform.offsetMin = Vector2.zero;
+        rectTransform.offsetMax = Vector2.zero;
 
 
         //GridLayoutGroup gridLayoutGroup = scheduleObject.AddComponent<GridLayoutGroup>();
@@ -85,8 +93,6 @@ public class JobsUI : MonoBehaviour
 
         // loop through weeks, add HLG for each? (calendar rows) 
 
-        InitialiseScheduleSlots();
-
         return scheduleObject;
     }
 
@@ -96,7 +102,9 @@ public class JobsUI : MonoBehaviour
         {
             GameObject scheduleSlot = new GameObject(JobConstants.scheduleSlotName);
             scheduleSlot.transform.parent = scheduleContainer.transform;
-            scheduleSlot.AddComponent<Image>().sprite = scheduleSlotSprite;
+            Image slotImage = scheduleSlot.AddComponent<Image>();
+            slotImage.sprite = scheduleSlotSprite;
+            slotImage.color = Color.blue; 
         }
     }
 
@@ -120,8 +128,9 @@ public class JobsUI : MonoBehaviour
             jobImage.color = Color.black;
 
             DragNDrop dragNDrop = newJob.AddComponent<DragNDrop>();
+            dragNDrop.availableJobsContainer = availableJobsContainer;
+            dragNDrop.scheduleContainer = scheduleContainer;
             dragNDrop.job = job;
-            dragNDrop.schedule = scheduleContainer;
 
             // Needs to be false otherwise Schedule can't fire events 
             newJob.AddComponent<CanvasGroup>().interactable = false; 

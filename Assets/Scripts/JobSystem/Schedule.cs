@@ -12,7 +12,7 @@ public class Schedule : MonoBehaviour, IDropHandler
             Debug.Log("OnDrop fired.");
 
             // Drop job in the schedule and center it 
-            eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = GetComponent<RectTransform>().anchoredPosition;
+            eventData.pointerDrag.GetComponent<RectTransform>().position = GetComponent<RectTransform>().position;
         }
     }
 

@@ -6,7 +6,9 @@ using UnityEngine.EventSystems;
 public class DragNDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
     private GameObject mainCanvas;
-    public GameObject schedule;
+    private GameObject messagesPanel;
+    public GameObject availableJobsContainer; 
+    public GameObject scheduleContainer;
     public GameObject testSchedule; 
     public Job job;
 
@@ -16,24 +18,19 @@ public class DragNDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDra
     private void Start()
     {
         mainCanvas = GameObject.Find("Canvas");
-        //schedule = GameObject.Find("ScheduleContainer"); 
-        //testSchedule = GameObject.Find("TestSchedule");
+        messagesPanel = GameObject.Find("MessagesPanel"); 
+
         rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
 
-        Debug.Log("Test Schedule position: " + testSchedule.transform.position); 
-    }
-
-    private void Update()
-    {
-        //Debug.Log("Job Rect: " + rectTransform.rect.position);
-        //Debug.Log("Sched Rect: " + schedule.GetComponent<RectTransform>().rect); 
-
+        Debug.Log("Schedule pos: " + scheduleContainer.transform.position);
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
         Debug.Log("OnBeginDrag fired.");
+        gameObject.transform.parent = messagesPanel.transform;
+
         canvasGroup.alpha = JobConstants.dragAlpha; 
         canvasGroup.blocksRaycasts = false; 
     }
@@ -48,35 +45,30 @@ public class DragNDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDra
     public void OnEndDrag(PointerEventData eventData)
     {
         Debug.Log("EndDrag event data position: " + eventData.position);
+        Debug.Log("Local pos: " + gameObject.transform.localPosition);
 
-        // Return to starting position if not scheduled 
-        if (!IsInsideSchedule())
+        // Return to starting position if not droopped in schedule 
+        if (IsInsideSchedule())
         {
-            gameObject.transform.position = job.startingPosition;
+            gameObject.transform.parent = availableJobsContainer.transform.parent;
+            //gameObject.transform.position = job.startingPosition;
+            //gameObject.transform.localPosition = job.startingPosition; 
         }
 
         // Raycast will pass through and hit the schedule 
         canvasGroup.alpha = JobConstants.dropAlpha; 
         canvasGroup.blocksRaycasts = true;
-
-
     }
 
     // Can we get rid of this and check eventData.anchoredPosition 
     // in Schedule's OnDrop method instead?
     private bool IsInsideSchedule()
     {
-        RectTransform scheduleRectTransform = schedule.GetComponent<RectTransform>(); 
+        RectTransform scheduleRectTransform = scheduleContainer.GetComponent<RectTransform>();
 
-        if (rectTransform.position.x <= scheduleRectTransform.position.x &&
-            rectTransform.position.x + rectTransform.rect.size.x >= scheduleRectTransform.position.x + scheduleRectTransform.rect.size.x &&
-            rectTransform.position.y <= scheduleRectTransform.position.y && 
-            rectTransform.position.y + rectTransform.rect.size.x >= scheduleRectTransform.position.x + scheduleRectTransform.rect.size.x)
-        {
-            Debug.Log("IsInsideSchedule."); 
-            return true; 
-        }
-
-        return false; 
+        return rectTransform.rect.x < scheduleRectTransform.rect.x + scheduleRectTransform.rect.width &&
+            scheduleRectTransform.rect.x < rectTransform.rect.x + rectTransform.rect.width &&
+            rectTransform.rect.y < scheduleRectTransform.rect.y + scheduleRectTransform.rect.height &&
+            scheduleRectTransform.rect.y < rectTransform.rect.y + rectTransform.rect.height; 
     }
 }
