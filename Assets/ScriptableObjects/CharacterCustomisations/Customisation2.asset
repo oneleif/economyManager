@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df84fe603bb353b40a5ff04d011c0f65, type: 3}
   m_Name: Customisation2
   m_EditorClassIdentifier: 
-  customisationImage: {fileID: 0}
-  customisationOptionIndex: 0
-  customisationColor: {r: 1, g: 0, b: 0, a: 1}
+  image: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 88470a997c4fd724ab8795bd73ed6017, type: 3}
+  index: 5
+  color: {r: 0, g: 0, b: 0, a: 1}
