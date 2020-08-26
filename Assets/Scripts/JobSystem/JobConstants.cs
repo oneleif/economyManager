@@ -14,11 +14,18 @@ public class JobConstants : MonoBehaviour
     public static Vector2 availableJobsContainerLeftPadding = new Vector2(64f, 64f);
 
     // ScheduleContainer dimensions 
+    public static int scheduleSlots = 4; 
     public static Vector2 scheduleContainerAnchorMin = new Vector2(0.5f, 0f);
     public static Vector2 scheduleContainerAnchorMax = Vector2.one;
     public static Vector2 scheduleContainerLocalScale = new Vector2(0.75f, 0.75f);
     public static int scheduleContainerSpacing = 32;
     public static int scheduleContainerLeftPadding = 32;
+
+    // Common dimensions 
+    public static int gridTopPadding = 16; 
+    public static int gridLeftPadding = 16;
+    public static Vector2 gridCellSize = new Vector2(80f, 80f);  
+    public static Vector2 gridSpacing = new Vector2(32f, 32f); 
 
     // Game object names 
     public static string availableJobsContainerName = "AvailableJobsContainer";
@@ -26,9 +33,9 @@ public class JobConstants : MonoBehaviour
     public static string scheduleSlotName = "ScheduleSlot"; 
 
     // Paths to png files 
-    public static string scheduleBackgroundSpritePath = "Sprites/ScheduleBackground.png"; 
-    public static string scheduleSlotSpritePath = "Sprites/ScheduleSlot.png";
-    public static string jobSpritePath = "Sprites/Briefcase.png"; 
+    public static string uiBackgroundSpritePath = "Sprites/ScheduleBackground"; 
+    public static string scheduleSlotSpritePath = "Sprites/ScheduleSlot";
+    public static string jobSpritePath = "Sprites/Briefcase"; 
 
     // Drag and drop parameters 
     public static float dragAlpha = 0.5f;

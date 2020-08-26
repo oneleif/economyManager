@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization.Json;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -22,13 +23,11 @@ public class DragNDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDra
 
         rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
-
-        Debug.Log("Schedule pos: " + scheduleContainer.transform.position);
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        Debug.Log("OnBeginDrag fired.");
+        // Unparent the job object from the available jobs UI 
         gameObject.transform.parent = messagesPanel.transform;
 
         canvasGroup.alpha = JobConstants.dragAlpha; 
@@ -37,31 +36,26 @@ public class DragNDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDra
 
     public void OnDrag(PointerEventData eventData)
     {
-        // Delta is distance that the mouse moved since previous frame
+        // Delta is the distance that the mouse moved since previous frame
         // Divide by canvas scale factor to prevent object from overshooting 
         rectTransform.anchoredPosition += eventData.delta / mainCanvas.GetComponent<Canvas>().scaleFactor;
     }
 
+    // This seems to be called before the Scehdule's OnDrop method
     public void OnEndDrag(PointerEventData eventData)
     {
-        Debug.Log("EndDrag event data position: " + eventData.position);
-        Debug.Log("Local pos: " + gameObject.transform.localPosition);
-
-        // Return to starting position if not droopped in schedule 
-        if (IsInsideSchedule())
-        {
-            gameObject.transform.parent = availableJobsContainer.transform.parent;
-            //gameObject.transform.position = job.startingPosition;
-            //gameObject.transform.localPosition = job.startingPosition; 
-        }
-
         // Raycast will pass through and hit the schedule 
-        canvasGroup.alpha = JobConstants.dropAlpha; 
         canvasGroup.blocksRaycasts = true;
+
+        canvasGroup.alpha = JobConstants.dropAlpha; 
+
+        // Return to starting position if not dropped in schedule 
+        if (gameObject.transform.parent != scheduleContainer.transform)
+        {
+            gameObject.transform.parent = availableJobsContainer.transform;
+        }        
     }
 
-    // Can we get rid of this and check eventData.anchoredPosition 
-    // in Schedule's OnDrop method instead?
     private bool IsInsideSchedule()
     {
         RectTransform scheduleRectTransform = scheduleContainer.GetComponent<RectTransform>();

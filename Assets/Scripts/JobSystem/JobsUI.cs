@@ -15,25 +15,21 @@ public class JobsUI : MonoBehaviour
     private Sprite scheduleSlotSprite; 
     private Sprite jobSprite;
 
-    private int scheduleSlots = 4; 
+    private int scheduleSlots = JobConstants.scheduleSlots; 
 
     private void Start()
     {
         Debug.Log("JobsContainer length: " + jobsContainer.jobsContainer.Length);
 
-        containerBackgroundSprite = Resources.Load<Sprite>("Sprites/ScheduleBackground.png");
-        scheduleSlotSprite = Resources.Load<Sprite>("Sprites/ScheduleSlot.png");
-        jobSprite = Resources.Load<Sprite>("Sprites/Briefcase.png");
+        // Load sprites 
+        containerBackgroundSprite = Resources.Load<Sprite>(JobConstants.uiBackgroundSpritePath);
+        scheduleSlotSprite = Resources.Load<Sprite>(JobConstants.scheduleSlotSpritePath);
+        jobSprite = Resources.Load<Sprite>(JobConstants.jobSpritePath);
 
+        // Create UI elements and populate with jobs 
         availableJobsContainer = InitialiseAvailableJobsContainer();
         scheduleContainer = InitialiseScheduleContainer();
         AddAvailableJobs();
-
-    }
-
-    private void Update()
-    {
-        
     }
 
     private GameObject InitialiseAvailableJobsContainer()
@@ -41,22 +37,18 @@ public class JobsUI : MonoBehaviour
         GameObject containerObject = new GameObject(JobConstants.availableJobsContainerName);
         containerObject.transform.parent = gameObject.transform;
 
-        //containerObject.AddComponent<Image>().sprite = Resources.Load<Sprite>(JobConstants.scheduleBackgroundSpritePath);
         Image containerImage = containerObject.AddComponent<Image>();
         containerImage.sprite = containerBackgroundSprite;
 
         RectTransform rectTransform = containerObject.GetComponent<RectTransform>();
         rectTransform.anchorMin = JobConstants.availableJobsContainerAnchorMin;
         rectTransform.anchorMax = JobConstants.availableJobsContainerAnchorMax;
-        rectTransform.localPosition = new Vector2(-1f, 0f);
+        rectTransform.localPosition = Vector2.left; 
         rectTransform.localScale = new Vector2(0.75f, 0.75f);
         rectTransform.offsetMin = Vector2.zero;
         rectTransform.offsetMax = Vector2.zero;
 
-        GridLayoutGroup gridLayoutGroup = containerObject.AddComponent<GridLayoutGroup>();
-        gridLayoutGroup.startCorner = GridLayoutGroup.Corner.UpperLeft;
-        gridLayoutGroup.spacing = JobConstants.availableJobsGridSpacing;
-        //gridLayoutGroup.cellSize = JobConstants.availableJobsGridCellSize; 
+        JobsUtils.SetupGridLayoutGroup(containerObject); 
 
         return containerObject; 
     }
@@ -66,7 +58,6 @@ public class JobsUI : MonoBehaviour
         GameObject scheduleObject = new GameObject(JobConstants.scheduleContainerName);
         scheduleObject.transform.parent = gameObject.transform;
 
-        //scheduleObject.AddComponent<Image>().sprite = Resources.Load<Sprite>(JobConstants.scheduleBackgroundSpritePath); 
         Image scheduleImage = scheduleObject.AddComponent<Image>();
         scheduleImage.sprite = containerBackgroundSprite;
 
@@ -81,19 +72,34 @@ public class JobsUI : MonoBehaviour
         rectTransform.offsetMin = Vector2.zero;
         rectTransform.offsetMax = Vector2.zero;
 
-
-        //GridLayoutGroup gridLayoutGroup = scheduleObject.AddComponent<GridLayoutGroup>();
-        HorizontalLayoutGroup horizontalLayoutGroup = scheduleObject.AddComponent<HorizontalLayoutGroup>();
-        horizontalLayoutGroup.childControlWidth = true;
-        horizontalLayoutGroup.childControlHeight = true;
-        horizontalLayoutGroup.childForceExpandWidth = true;
-        horizontalLayoutGroup.childForceExpandHeight = true;
-        horizontalLayoutGroup.spacing = JobConstants.scheduleContainerSpacing;
-        horizontalLayoutGroup.padding.left = JobConstants.scheduleContainerLeftPadding;
-
-        // loop through weeks, add HLG for each? (calendar rows) 
+        JobsUtils.SetupGridLayoutGroup(scheduleObject); 
 
         return scheduleObject;
+    }
+
+    private void AddAvailableJobs()
+    {
+        foreach (Job job in jobsContainer.jobsContainer)
+        {
+            GameObject newJob = new GameObject(job.title); 
+            newJob.transform.parent = availableJobsContainer.transform;
+
+            // Store location data for repositioning on failed drop.  
+            // Assign the individual floats to prevent copying the reference 
+            job.startingPosition = new Vector2(newJob.transform.position.x, newJob.transform.position.y);
+
+            Image jobImage = newJob.AddComponent<Image>();
+            jobImage.sprite = jobSprite; 
+
+            DragNDrop dragNDrop = newJob.AddComponent<DragNDrop>();
+            dragNDrop.availableJobsContainer = availableJobsContainer;
+            dragNDrop.scheduleContainer = scheduleContainer;
+            dragNDrop.job = job;
+
+            // Needs to be false otherwise Schedule can't fire events 
+            newJob.AddComponent<CanvasGroup>().interactable = false; 
+            
+        }
     }
 
     private void InitialiseScheduleSlots()
@@ -104,37 +110,7 @@ public class JobsUI : MonoBehaviour
             scheduleSlot.transform.parent = scheduleContainer.transform;
             Image slotImage = scheduleSlot.AddComponent<Image>();
             slotImage.sprite = scheduleSlotSprite;
-            slotImage.color = Color.blue; 
-        }
-    }
-
-
-    private void AddAvailableJobs()
-    {
-        foreach (Job job in jobsContainer.jobsContainer)
-        {
-            GameObject newJob = new GameObject(); 
-            newJob.transform.parent = availableJobsContainer.transform;
-
-            Debug.Log("New Job position: "+ newJob.transform.position);
-            Debug.Log("New Job local position: " + newJob.transform.localPosition);
-
-            // Store location data for repositioning on failed drop.  
-            // Assign the individual floats to prevent copying the reference? 
-            job.startingPosition = new Vector2(newJob.transform.position.x, newJob.transform.position.y);
-
-            //newJob.AddComponent<Image>().sprite = Resources.Load<Sprite>(JobConstants.jobSpritePath);
-            Image jobImage = newJob.AddComponent<Image>();
-            jobImage.color = Color.black;
-
-            DragNDrop dragNDrop = newJob.AddComponent<DragNDrop>();
-            dragNDrop.availableJobsContainer = availableJobsContainer;
-            dragNDrop.scheduleContainer = scheduleContainer;
-            dragNDrop.job = job;
-
-            // Needs to be false otherwise Schedule can't fire events 
-            newJob.AddComponent<CanvasGroup>().interactable = false; 
-            
+            slotImage.color = Color.blue;
         }
     }
 }

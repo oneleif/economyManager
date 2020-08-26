@@ -9,20 +9,8 @@ public class Schedule : MonoBehaviour, IDropHandler
     {
         if (eventData.pointerDrag != null)
         {
-            Debug.Log("OnDrop fired.");
-
-            // Drop job in the schedule and center it 
-            eventData.pointerDrag.GetComponent<RectTransform>().position = GetComponent<RectTransform>().position;
+            // Parent job to the schedule if dropped inside 
+            eventData.pointerDrag.transform.parent = gameObject.transform;
         }
-    }
-
-    private void Start()
-    {
-        
-    }
-
-    private void Update()
-    {
-        
     }
 }
