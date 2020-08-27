@@ -52,12 +52,17 @@ public class GameManager : MonoBehaviour
         Mission mission = missionButton.mission;
         mission.inProgress = true;
 
-        int currentTimer = mission.missionDurationInSeconds;
+        // Increase timer by a factor of n 
+        // to match the progress increments
+        int currentTimer = mission.missionDurationInSeconds * MissionConstants.progressScaleFactor;
         while(currentTimer > 0)
         {
-            yield return new WaitForSeconds(1);
+            // Wait for a fraction of a second 
+            // in order to accomodate missions 
+            // under a second in length 
+            yield return new WaitForSeconds(1 / MissionConstants.progressScaleFactor);
             currentTimer--;
-            missionButton.SetMissionTime(currentTimer);
+            missionButton.SetMissionTime(currentTimer / MissionConstants.progressScaleFactor);
         }
         
         playerData.playerMoney += mission.missionValue;
