@@ -75,8 +75,6 @@ public class ColourSliders : MonoBehaviour
                 break; 
 
         }
-
-        LogSliderValues();
     }
 
     private void LogSliderValues()
