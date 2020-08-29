@@ -32,7 +32,6 @@ public class MissionButton : MonoBehaviour
     {
         TimeSpan missionDuration = new TimeSpan(0, 0, timeLeftInSeconds);
         countdownText.text = missionDuration.ToString("c");
-        slider.value += 1f / (float)this.mission.missionDurationInSeconds;
     }
 
     public void ResetMissionTime()

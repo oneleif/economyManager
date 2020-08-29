@@ -6,5 +6,5 @@ public class MissionConstants : MonoBehaviour
 {
     // Determines progress bar fill smoothness  
     // We divide by this amount in WaitForSeconds 
-    public static int progressScaleFactor = 10; 
+    public static int sliderScaleFactor = 10; 
 }
