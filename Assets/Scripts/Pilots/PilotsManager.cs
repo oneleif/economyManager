@@ -7,29 +7,44 @@ public class PilotsManager : MonoBehaviour
 {
 	public GameObject crewPanel;
 	public GameObject pilotButtonPrefab;
-	public GameObject pilotProfilePanel;
 	public PilotsContainer pilotsContainer;
 
-	Image pilotAvatar; 
+	private GameObject pilotProfilePanel;
+	private Text pilotNameText;
+	private Text pilotDescriptionText; 
+	private Image pilotAvatar; 
 
 	private void Awake()
 	{
-		GeneratePilotProfilePanel(); 
-		GeneratePilotButtons(); 
-		//pilotProfilePanel.SetActive(false); 
-		//pilotProfilePanel.GetComponentInChildren<Button>().onClick.AddListener(delegate { ClosePilotProfilePanel(); });
+		GeneratePilotsUI(); 
+
+
+        //pilotProfilePanel.SetActive(false);
+        //pilotProfilePanel.GetComponentInChildren<Button>().onClick.AddListener(delegate { ClosePilotProfilePanel(); });
+    }
+
+	private void GeneratePilotsUI()
+    {
+		GeneratePilotProfilePanel();
+		GeneratePilotButtons();
+		GeneratePilotNameText();
+        GeneratePilotDescription();
+		GeneratePilotAvatar();
+		GenerateBackButton(); 
 	}
 
 	private void GeneratePilotButtons()
 	{
 		GameObject pilotButtonGroup = new GameObject("PilotButtonGroup");
 		pilotButtonGroup.transform.parent = crewPanel.transform;
-		RectTransform rectTransform = pilotButtonGroup.GetComponent<RectTransform>();
+		RectTransform rectTransform = pilotButtonGroup.AddComponent<RectTransform>();
 		rectTransform.localPosition = Vector2.zero;
-		rectTransform.anchorMin = Vector2.zero;
-		rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+        rectTransform.anchorMin = Vector2.zero;
+        rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
 
-		pilotButtonGroup.AddComponent<VerticalLayoutGroup>(); 
+        VerticalLayoutGroup verticalLayoutGroup = pilotButtonGroup.AddComponent<VerticalLayoutGroup>();
+		verticalLayoutGroup.childControlWidth = true;
+		verticalLayoutGroup.childControlHeight = true;
 
 		foreach (Pilot pilot in pilotsContainer.pilots)
 		{
@@ -50,9 +65,9 @@ public class PilotsManager : MonoBehaviour
 	{
 		crewPanel.SetActive(false);
         pilotProfilePanel.SetActive(true);
-        //pilotProfilePanel.transform.Find("PilotProfileName").GetComponent<Text>().text = pilot.pilotName;
-        //pilotProfilePanel.transform.Find("PilotProfileDescription").GetComponent<Text>().text = pilot.description;
-        //pilotProfilePanel.transform.Find("PilotProfileAvatar").GetComponent<Image>().sprite = pilot.avatar;
+		pilotNameText.text = pilot.name;
+		pilotDescriptionText.text = pilot.description;
+		pilotAvatar.sprite = pilot.avatar;
     }
 
 	private void GeneratePilotProfilePanel()
@@ -63,7 +78,7 @@ public class PilotsManager : MonoBehaviour
 		// while the crew panel is inactive. 
 		pilotProfilePanel.transform.parent = crewPanel.transform.parent.transform;
 
-		RectTransform rectTransform = pilotProfilePanel.GetComponent<RectTransform>();
+		RectTransform rectTransform = pilotProfilePanel.AddComponent<RectTransform>();
 		rectTransform.anchorMin = Vector2.zero;
 		rectTransform.anchorMax = Vector2.one;
 		rectTransform.localScale = Vector3.one;
@@ -78,14 +93,14 @@ public class PilotsManager : MonoBehaviour
 		GameObject pilotNameObject = new GameObject("PilotName");
 		pilotNameObject.transform.parent = pilotProfilePanel.transform;
 
-		RectTransform rectTransform = pilotNameObject.GetComponent<RectTransform>();
+		RectTransform rectTransform = pilotNameObject.AddComponent<RectTransform>();
 		rectTransform.anchorMin = new Vector2(0f, 0.75f);
 		rectTransform.anchorMax = new Vector2(0.5f, 1f); 
 		//rectTransform.localScale = Vector3.one;
 		rectTransform.offsetMin = Vector2.zero;
 		rectTransform.offsetMax = Vector2.zero;
 
-		Text pilotNameText = pilotNameObject.AddComponent<Text>(); 
+		pilotNameText = pilotNameObject.AddComponent<Text>(); 
 		//pilotNameText.text = 
     }
 
@@ -94,14 +109,14 @@ public class PilotsManager : MonoBehaviour
 		GameObject pilotDescriptionObject = new GameObject("PilotDescription");
 		pilotDescriptionObject.transform.parent = pilotProfilePanel.transform;
 
-		RectTransform rectTransform = pilotDescriptionObject.GetComponent<RectTransform>();
+		RectTransform rectTransform = pilotDescriptionObject.AddComponent<RectTransform>();
 		rectTransform.anchorMin = new Vector2(0f, 0.5f);
 		rectTransform.anchorMax = new Vector2(0.5f, 0.75f);
 		//rectTransform.localScale = Vector3.one;
 		rectTransform.offsetMin = Vector2.zero;
 		rectTransform.offsetMax = Vector2.zero;
 
-		Text pilotDescriptionText = pilotDescriptionObject.AddComponent<Text>();
+		pilotDescriptionText = pilotDescriptionObject.AddComponent<Text>();
 	}
 
 	private void GeneratePilotAvatar()
@@ -109,7 +124,7 @@ public class PilotsManager : MonoBehaviour
 		GameObject pilotAvatarObject = new GameObject("PilotAvatar");
 		pilotAvatarObject.transform.parent = pilotProfilePanel.transform;
 
-		RectTransform rectTransform = pilotAvatarObject.GetComponent<RectTransform>();
+		RectTransform rectTransform = pilotAvatarObject.AddComponent<RectTransform>();
 		rectTransform.anchorMin = new Vector2(0.5f, 0.5f); // v-one / 2f 
 		rectTransform.anchorMax = Vector2.one; 
 		//rectTransform.localScale = Vector3.one;
@@ -122,10 +137,14 @@ public class PilotsManager : MonoBehaviour
 	private void GenerateBackButton()
     {
 		GameObject backButton = new GameObject("BackButton");
+		if (pilotProfilePanel != null)
+        {
+			backButton.transform.parent = pilotProfilePanel.transform; 
+        }
 
-		RectTransform rectTransform = backButton.GetComponent<RectTransform>();
+		RectTransform rectTransform = backButton.AddComponent<RectTransform>();
 		rectTransform.anchorMin = new Vector2(0.25f, 0f); // v-one / 2f 
-		rectTransform.anchorMax = new Vector2(0.75f, 0f); 
+		rectTransform.anchorMax = new Vector2(0.75f, 0.25f); 
 		//rectTransform.localScale = Vector3.one;
 		rectTransform.offsetMin = Vector2.zero;
 		rectTransform.offsetMax = Vector2.zero;

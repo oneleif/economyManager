@@ -851,7 +851,7 @@ GameObject:
   m_Component:
   - component: {fileID: 519467241}
   m_Layer: 5
-  m_Name: PilotProfilePanel(Temp)
+  m_Name: PilotProfilePanelOld
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2484,7 +2484,6 @@ MonoBehaviour:
   crewPanel: {fileID: 1259725328}
   pilotButtonPrefab: {fileID: 5230716868348227813, guid: 561c8d19af5009041a7aafd4958ef06d,
     type: 3}
-  pilotProfilePanel: {fileID: 519467240}
   pilotsContainer: {fileID: 11400000, guid: 579e06c9aca54514e8a62755aae4bd7b, type: 2}
 --- !u!4 &1418733289
 Transform:
@@ -2561,7 +2560,7 @@ GameObject:
   - component: {fileID: 1470362098}
   - component: {fileID: 1470362097}
   m_Layer: 5
-  m_Name: PilotButtonGroup
+  m_Name: PilotButtonGroupOld
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
