@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ac5ab65618ebc94eb66fbef4d23adfd, type: 3}
+  m_Name: PilotsContainer
+  m_EditorClassIdentifier: 
+  pilots:
+  - {fileID: 11400000, guid: fddcd15a37131904686ef2f359637a5f, type: 2}
+  - {fileID: 11400000, guid: 83ad1ba972968de448d603d2183e82c9, type: 2}
+  - {fileID: 11400000, guid: f4e22edddd55a9d41be449012592743a, type: 2}
