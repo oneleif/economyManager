@@ -8,6 +8,7 @@ public class MissionButton : MonoBehaviour
 {
     public GameObject buttonObject;
     public Button button;
+    public Slider slider; 
 
     public GameObject pilotTextObject;
     public Text pilotText; 
@@ -16,7 +17,7 @@ public class MissionButton : MonoBehaviour
     public Text countdownText;
 
     public Mission mission;
-    public bool performingMission;
+    public bool performingMission;  
 
     public void Setup(Mission mission)
     {
