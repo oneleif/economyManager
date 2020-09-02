@@ -9,9 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c90981045dcf564ca5a5e8e5da29649, type: 3}
-  m_Name: Mission4
+  m_Script: {fileID: 11500000, guid: c568899235585fc4ba16dfde308b473d, type: 3}
+  m_Name: BlackjackDealer
   m_EditorClassIdentifier: 
-  pilotsName: sabien
-  missionDurationInSeconds: 15
-  missionValue: 10000
+  handTotal: 0
+  chips: 0
+  wager: 0
+  hasWagered: 0
+  isStanding: 0
+  isBust: 0
+  isDealer: 0
