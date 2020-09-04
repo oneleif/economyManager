@@ -95,7 +95,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         Vector3 movement = new Vector3(movementVector.x, 0f, movementVector.y); 
-        rb.MovePosition(transform.position + movement * currentSpeed); 
+        rb.MovePosition(transform.position + movement * currentSpeed * Time.fixedDeltaTime); 
         //gameObject.transform.position += new Vector3(movementVector.x, 0f, movementVector.y) 
         //    * currentSpeed * Time.fixedDeltaTime; 
     }
