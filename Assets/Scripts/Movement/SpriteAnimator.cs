@@ -24,6 +24,8 @@ public class SpriteAnimator : MonoBehaviour
     // Indices are: 0-3 WASD
     public Sprite[] stationaryFrames;
 
+    public Material material;
+
     // Stores the current stationary sprite
     private Sprite stationaryPosition;  
     
@@ -38,8 +40,8 @@ public class SpriteAnimator : MonoBehaviour
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
 
         // Default stationary position is facing down 
-        stationaryPosition = stationaryFrames[2]; 
-        spriteRenderer.sprite = stationaryPosition;
+        stationaryPosition = stationaryFrames[2];
+        material.mainTexture = stationaryPosition.texture;
 
         // Set frame rate proportionally to movement speed 
         // Enable this when not Serialized
@@ -52,7 +54,7 @@ public class SpriteAnimator : MonoBehaviour
     {
         if (PlayerMovement.movementVector == Vector2.zero)
         {
-            spriteRenderer.sprite = stationaryPosition; 
+            material.mainTexture = stationaryPosition.texture;
         }
         else
         {
@@ -70,10 +72,12 @@ public class SpriteAnimator : MonoBehaviour
                 currentFrame = (currentFrame + 1) % frameArray.Length;
 
                 // Flip sprite if moving left 
-                spriteRenderer.flipX = flipped ? true : false; 
+                //spriteRenderer.flipX = flipped ? true : false;
+                material.mainTextureScale = flipped ? new Vector2(-1f, 1f) : Vector2.one;
 
                 // Update the sprite being renderer
-                spriteRenderer.sprite = frameArray[currentFrame]; 
+                //spriteRenderer.sprite = frameArray[currentFrame]; 
+                material.mainTexture = frameArray[currentFrame].texture;
             }
         }
     }
