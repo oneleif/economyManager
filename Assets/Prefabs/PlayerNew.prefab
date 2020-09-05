@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 9190018061237726626}
   m_Layer: 0
   m_Name: PlayerNew
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -164,6 +164,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 8713f2f490656184aabe2ffc53a7c017, type: 3}
   - {fileID: 21300000, guid: a2d1dde8e1a043f4fa5ff54384747bff, type: 3}
   - {fileID: 21300000, guid: 6a7d2e0bed60d8b45a333175f791a924, type: 3}
+  material: {fileID: 0}
 --- !u!54 &4392894313927051706
 Rigidbody:
   m_ObjectHideFlags: 0

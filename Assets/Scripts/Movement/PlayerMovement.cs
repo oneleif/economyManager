@@ -10,15 +10,15 @@ public enum Direction
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private SpriteAnimator spriteAnimator;
-
-    private float currentSpeed = 0f;
-    [SerializeField] private float maximumSpeed = 100f;
-    [SerializeField] private float acceleration = 10f; 
-
     public static Vector2 movementVector;
 
-    Rigidbody rb;
+    [SerializeField] private SpriteAnimator spriteAnimator;
+
+    private float currentSpeed; 
+    [SerializeField] private float maximumSpeed; 
+    [SerializeField] private float acceleration;
+
+    private Rigidbody rb;
 
     private void Start()
     {
@@ -96,8 +96,6 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 movement = new Vector3(movementVector.x, 0f, movementVector.y); 
         rb.MovePosition(transform.position + movement * currentSpeed * Time.fixedDeltaTime); 
-        //gameObject.transform.position += new Vector3(movementVector.x, 0f, movementVector.y) 
-        //    * currentSpeed * Time.fixedDeltaTime; 
     }
 
     private void LogMovementData()
