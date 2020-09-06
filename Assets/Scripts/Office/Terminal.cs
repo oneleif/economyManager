@@ -13,7 +13,12 @@ public class Terminal : MonoBehaviour
     private void Start()
     {
         rb = player.GetComponent<Rigidbody>();
-        rb.WakeUp(); 
+
+        if (rb.IsSleeping())
+        {
+            rb.WakeUp();
+        }
+
         canvasManager = canvasManagerObject.GetComponent<CanvasManager>();
     }
 

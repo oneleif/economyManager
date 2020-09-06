@@ -565,6 +565,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1670624565, guid: a06f1a9e44fccb3409ddc94a08e3cac6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1670624567, guid: a06f1a9e44fccb3409ddc94a08e3cac6, type: 3}
       propertyPath: m_CullingMask.m_Bits
       value: 4294967295
@@ -573,6 +577,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PlayerNew
+      objectReference: {fileID: 0}
+    - target: {fileID: 1972979662120986132, guid: a06f1a9e44fccb3409ddc94a08e3cac6,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1972979662120986133, guid: a06f1a9e44fccb3409ddc94a08e3cac6,
         type: 3}
@@ -652,11 +661,26 @@ PrefabInstance:
     - target: {fileID: 4392894313927051706, guid: a06f1a9e44fccb3409ddc94a08e3cac6,
         type: 3}
       propertyPath: m_CollisionDetection
-      value: 0
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4392894313927051706, guid: a06f1a9e44fccb3409ddc94a08e3cac6,
+        type: 3}
+      propertyPath: m_Interpolate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4392894313927051706, guid: a06f1a9e44fccb3409ddc94a08e3cac6,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 112
       objectReference: {fileID: 0}
     - target: {fileID: 6220973636959777398, guid: a06f1a9e44fccb3409ddc94a08e3cac6,
         type: 3}
       propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6220973636959777398, guid: a06f1a9e44fccb3409ddc94a08e3cac6,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7931498228508652918, guid: a06f1a9e44fccb3409ddc94a08e3cac6,
