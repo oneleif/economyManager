@@ -26,11 +26,11 @@ public class Terminal : MonoBehaviour
     {
         if (other.gameObject == player)
         {
-            if (Input.GetKeyUp(PlayerConstants.action))
+            if (Input.GetKeyDown(PlayerConstants.action))
             {
                 canvasManager.ActivateCanvas();
             }
-            else if (Input.GetKeyUp(PlayerConstants.exit))
+            else if (Input.GetKeyDown(PlayerConstants.exit))
             {
                 canvasManager.DeactivateCanvas();
             }
