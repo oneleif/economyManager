@@ -5,7 +5,7 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.UI;
 
-public class Crew : MonoBehaviour
+public class RandomNameGenerator : MonoBehaviour
 {
 	private enum Gender { Male, Female, Robot };
 

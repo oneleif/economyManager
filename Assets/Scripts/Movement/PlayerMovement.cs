@@ -10,13 +10,20 @@ public enum Direction
 
 public class PlayerMovement : MonoBehaviour
 {
+    public static Vector2 movementVector;
+
     [SerializeField] private SpriteAnimator spriteAnimator;
 
-    private float currentSpeed = 0f;
-    [SerializeField] private float maximumSpeed = 100f;
-    [SerializeField] private float acceleration = 10f; 
+    private float currentSpeed; 
+    [SerializeField] private float maximumSpeed; 
+    [SerializeField] private float acceleration;
 
-    public static Vector2 movementVector;
+    private Rigidbody rb;
+
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody>(); 
+    }    
 
     // Get input in Update 
     private void Update()
@@ -37,7 +44,6 @@ public class PlayerMovement : MonoBehaviour
         }
 
         MovePlayer(); 
-
     }
 
     private void SetDirection()
@@ -88,8 +94,8 @@ public class PlayerMovement : MonoBehaviour
             currentSpeed = 0f;
         }
 
-        gameObject.transform.position += new Vector3(movementVector.x, movementVector.y, 0f) 
-            * currentSpeed * Time.fixedDeltaTime; 
+        Vector3 movement = new Vector3(movementVector.x, 0f, movementVector.y); 
+        rb.MovePosition(transform.position + movement * currentSpeed * Time.fixedDeltaTime); 
     }
 
     private void LogMovementData()

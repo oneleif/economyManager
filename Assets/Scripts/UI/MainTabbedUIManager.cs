@@ -30,7 +30,7 @@ public class MainTabbedUIManager : MonoBehaviour
 
     void Update()
     {
-        
+
     }
 
     private void SetupButtonListeners()
